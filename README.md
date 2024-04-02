@@ -19,6 +19,13 @@ You can run `npx wrangler@latest dev` in any example project directory to run a 
 - [**`03-fastapi/`**](03-fastapi) — demonstrates how to use the [FastAPI](https://fastapi.tiangolo.com/) package with Python Workers
 - [**`04-langchain/`**](04-langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers
 
+## Open Beta and Limits
+
+- Python Workers are in open beta. You can currently only use [built-in packages](https://developers.cloudflare.com/workers/languages/python/packages/) in local development. Support for deploying Workers with a `requirements.txt` file is coming soon.
+- You must add the `python_workers` compatibility flag to your Worker, while Python Workers are in open beta.
+
+We’d love your feedback. Join the `#python-workers channel` in the [Cloudflare Developers Discord](https://discord.cloudflare.com/) and let us know what you’d like to see next.
+
 ## License
 
 The [Apache 2.0 license](LICENSE).
