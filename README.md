@@ -21,4 +21,4 @@ You can run `npx wrangler@latest dev` in any example project directory to run a 
 
 ## License
 
-The [MIT license](LICENSE).
+The [Apache 2.0 license](LICENSE).
