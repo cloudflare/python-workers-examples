@@ -8,9 +8,10 @@ This is a collection of examples for [writing Cloudflare Workers in Python](http
 2. `cd hello`
 3. `npx wrangler@latest dev`
 4. Press the `b` key to open a browser tab, and make a request to your Worker
-5. `npx wrangler@latest deploy` to deploy your Worker to Cloudflare
 
 You can run `npx wrangler@latest dev` in any example project directory to run a local development server using [Wrangler](https://developers.cloudflare.com/workers/wrangler/), the CLI for Cloudflare Workers. This local development server is powered by [workerd](https://github.com/cloudflare/workerd), the open-source Workers runtime.
+
+Need to deploy your Worker to Cloudflare? Python Workers are in open beta and have a few [limitations](#open-beta-and-limits).
 
 ## Examples
 
