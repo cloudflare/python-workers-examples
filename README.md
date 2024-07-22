@@ -22,7 +22,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 
 ## Open Beta and Limits
 
-- Python Workers are in open beta. You can currently only use [built-in packages](https://developers.cloudflare.com/workers/languages/python/packages/) in local development. Support for deploying Workers with a `requirements.txt` file is coming soon.
+- Python Workers are in open beta. Currently, you can only deploy Python Workers that use the standard library. [Packages](https://developers.cloudflare.com/workers/languages/python/packages/#supported-packages) **cannot be deployed** and will only work in local development for the time being.
 - You must add the `python_workers` compatibility flag to your Worker, while Python Workers are in open beta.
 
 We’d love your feedback. Join the `#python-workers channel` in the [Cloudflare Developers Discord](https://discord.cloudflare.com/) and let us know what you’d like to see next.
