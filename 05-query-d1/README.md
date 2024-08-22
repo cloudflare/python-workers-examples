@@ -1,25 +1,22 @@
-### Query a D1 Database with Cloudflare Workers in Python
+# Query a D1 Database with Cloudflare Workers Example
 
-1. Create a new Cloudflare Worker from the command line with `npm create cloudflare@latest`. When prompted, give your project a name, select `Hello World example`, `Hello World Worker template`, and `Python (beta)` when asked about language.
+Warning: Python support in Workers is experimental and things will break. This demo is meant for reference only right now; you should be prepared to update your code between now and official release time as APIs may change.
 
-OR
+Currently, Python Workers using packages cannot be deployed and will only work in local development for the time being.
 
-1. `git clone https://github.com/cloudflare/python-workers-examples
-cd python-workers-examples/01-hello
-npx wrangler@latest dev`
+### How to Run
+Download this quotes file from [Hugging Face in SQL form](https://huggingface.co/datasets/lizziepika/quotes_sql/blob/main/data.sql)
 
-3. Replace the boilerplate code in a `src/entry.py` with this `src/entry.py` code.
+Create a new D1 database by running on the command line `npx wrangler d1 create {D1-NAME}`. Copy and paste the output into your `wrangler.toml` to bind your D1 database to your Python Worker.
 
-4. Download this `quotes.csv` file from https://www.kaggle.com/datasets/manann/quotes-500k?select=quotes.csv
+Ensure that your Wrangler version is up to date (3.30.0 and above).
 
-5. Save it to a directory called `data` in the root directory here
+```
+$ wrangler -v
+ ⛅️ wrangler 3.30.0
+ ```
+Now, if you run `wrangler dev` within this directory, it should use the config in`wrangler.toml` to run the demo.
 
-6. Run `python3 data/csvtosql.py` to convert the CSV file to SQL
+You can also run `wrangler deploy` to deploy the demo.
 
-7. Create a new D1 database by running on the command line `npx wrangler d1 create {D1-NAME}`. Copy and paste the output into your wrangler.toml to bind your D1 database to your Python Worker.
-
-8. Import the new SQL file to D1 with `npx wrangler d1 execute {YOUR-DATABASE-NAME} --remote --file=data.sql`
-
-9. Deploy your Worker with `npx wrangler@latest deploy`
-
-10. Get a random quote from the database by visiting your deployed worker in the browser!<img width="1421" alt="deployed app" src="https://github.com/user-attachments/assets/131a2836-2305-4b73-a54a-50dac039108f">
+Finally, get a random quote from the database by visiting your deployed worker in the browser!<img width="1421" alt="deployed app" src="https://github.com/user-attachments/assets/131a2836-2305-4b73-a54a-50dac039108f">

@@ -1,9 +1,5 @@
 #:schema node_modules/wrangler/config-schema.json
 compatibility_date = "2024-08-06"
-# Automatically place your workloads in an optimal location to minimize latency.
-# rather than the end user may result in better performance.
-# [placement]
-# mode = "smart"
 
 [ai]
 binding = "AI"
@@ -11,4 +7,4 @@ binding = "AI"
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "quotes" # REPLACE WITH YOUR DB NAME
-database_id = "408cddb7-e3f7-40d7-a4f7-33136a7fd3fa" #REPLACE WITH YOUR DB ID
+database_id = "408cddb7-e3f7-40d7-a4f7-33136a7fd3fa" # REPLACE WITH YOUR DB ID
