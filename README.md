@@ -19,6 +19,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`02-binding/`**](02-binding) — shows how [bindings](https://developers.cloudflare.com/workers/configuration/bindings/) work in Python Workers. Put a key into Workers KV, and then read it.
 - [**`03-fastapi/`**](03-fastapi) — demonstrates how to use the [FastAPI](https://fastapi.tiangolo.com/) package with Python Workers
 - [**`04-langchain/`**](04-langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers
+- [**`05-query-d1/`**](05-query-d1) - shows how to query D1 with Python Workers
 
 ## Open Beta and Limits
 
