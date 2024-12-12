@@ -1,4 +1,4 @@
-from js import Response
+from cloudflare.workers import Response
 
 async def on_fetch(request, env):
     query = """
