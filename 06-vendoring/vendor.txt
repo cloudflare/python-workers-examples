@@ -1,0 +1,2 @@
+markupsafe
+jinja2
