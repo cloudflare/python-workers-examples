@@ -20,11 +20,13 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`03-fastapi/`**](03-fastapi) — demonstrates how to use the [FastAPI](https://fastapi.tiangolo.com/) package with Python Workers
 - [**`04-langchain/`**](04-langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers
 - [**`05-query-d1/`**](05-query-d1) - shows how to query D1 with Python Workers
+- [**`06-vendoring/`**](06-vendring) - shows how to vendor packages that are not included in the built-in package list
 
 ## Open Beta and Limits
 
-- Python Workers are in open beta. Currently, you can only deploy Python Workers that use the standard library. [Packages](https://developers.cloudflare.com/workers/languages/python/packages/#supported-packages) **cannot be deployed** and will only work in local development for the time being.
-- You must add the `python_workers` compatibility flag to your Worker, while Python Workers are in open beta.
+- Python Workers are in open beta. Currently, you can only deploy Python Workers that use the standard library. [Packages](https://developers.cloudflare.com/workers/languages/python/packages/#supported-packages) **cannot be deployed** and will only work in local development by default.
+- If you wish to join our closed beta which enables deploying packages, fill out [this form](https://forms.gle/827KAtKJTZdgAkNm7).
+- You must add the `python_workers` compatibility flag to your Worker while Python Workers are in open beta.
 
 We’d love your feedback. Join the `#python-workers channel` in the [Cloudflare Developers Discord](https://discord.cloudflare.com/) and let us know what you’d like to see next.
 
