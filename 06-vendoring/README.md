@@ -16,16 +16,28 @@ First, install Python3.12 and pip for Python 3.12.
 
 *Currently, other versions of Python will not work - use 3.12!*
 
-Then create a virtual environment and activate it from your shell:
+The easiest way to install Python 3.12 is using uv, so install it by following
+https://docs.astral.sh/uv/getting-started/installation/.
+
+Then run:
+
 ```console
-python3.12 -m venv .venv
-source .venv/bin/activate
+uv python install 3.12
+```
+
+Then create a virtual environment and activate it from your shell:
+
+```console
+uv venv -p 3.12
+# activate the venv using the command `uv` has given you
+# usually `source .venv/bin/activate` or `.venv\Scripts\activate`
 ```
 
 Within our virtual environment, install the pyodide CLI:
+
 ```console
-.venv/bin/pip install pyodide-build
-.venv/bin/pyodide venv .venv-pyodide
+uv pip install pyodide-build
+.\.venv\Scripts\pyodide.exe venv .venv-pyodide
 ```
 
 Next, add packages to your vendor.txt file. Here we'll add jinja2
