@@ -12,6 +12,8 @@ Vendored packages are added to your source files and need to be installed in a s
 
 ### Vendoring Packages
 
+[//]: # (NOTE: when updating the instructions below, be sure to also update the vendoring.yml CI workflow)
+
 First, install Python3.12 and pip for Python 3.12.
 
 *Currently, other versions of Python will not work - use 3.12!*
