@@ -20,7 +20,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`03-fastapi/`**](03-fastapi) — demonstrates how to use the [FastAPI](https://fastapi.tiangolo.com/) package with Python Workers
 - [**`04-langchain/`**](04-langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers
 - [**`05-query-d1/`**](05-query-d1) - shows how to query D1 with Python Workers
-- [**`06-vendoring/`**](06-vendring) - shows how to vendor packages that are not included in the built-in package list
+- [**`06-vendoring/`**](06-vendoring) - shows how to vendor packages that are not included in the built-in package list
 
 ## Open Beta and Limits
 
