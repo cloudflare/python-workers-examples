@@ -29,7 +29,5 @@ async def say_hi(name: str):
 @app.get("/env")
 async def env(req: Request):
     env = req.scope["env"]
-    return {
-        "message": "Here is an example of getting an environment variable: "
-        + env.MESSAGE
-    }
+    message = f"Here is an example of getting an environment variable: {env.MESSAGE}"
+    return {"message": message}
