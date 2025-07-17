@@ -1,5 +1,6 @@
-from workers import Response
+from workers import handler, Response
 
+@handler
 async def on_fetch(request, env):
     query = """
         SELECT quote, author
@@ -8,7 +9,7 @@ async def on_fetch(request, env):
         LIMIT 1;
         """
     results = await env.DB.prepare(query).all()
-    data = results.results[0] 
+    data = results.results[0]
 
     # Return a JSON response
     return Response.json(data)
