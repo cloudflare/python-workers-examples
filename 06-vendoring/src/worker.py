@@ -1,11 +1,13 @@
 import jinja2
 from fastapi import FastAPI, Request
+from workers import WorkerEntrypoint
 
 environment = jinja2.Environment()
 template = environment.from_string("Hello, {{ name }}!")
 
 
-async def on_fetch(request, env):
+class Default(WorkerEntrypoint):
+  async def fetch(self, request, env):
     import asgi
 
     return await asgi.fetch(app, request, env)

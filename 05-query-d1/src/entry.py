@@ -1,7 +1,7 @@
-from workers import handler, Response
+from workers import WorkerEntrypoint, Response
 
-@handler
-async def on_fetch(request, env):
+class Default(WorkerEntrypoint):
+  async def fetch(self, request, env):
     query = """
         SELECT quote, author
         FROM qtable
