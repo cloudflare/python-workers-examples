@@ -7,10 +7,10 @@ template = environment.from_string("Hello, {{ name }}!")
 
 
 class Default(WorkerEntrypoint):
-  async def fetch(self, request, env):
-    import asgi
+    async def fetch(self, request, env):
+        import asgi
 
-    return await asgi.fetch(app, request, env)
+        return await asgi.fetch(app, request, env)
 
 
 app = FastAPI()
