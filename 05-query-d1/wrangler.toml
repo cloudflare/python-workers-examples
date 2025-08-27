@@ -1,4 +1,5 @@
 #:schema node_modules/wrangler/config-schema.json
+name = "python-d1"
 compatibility_date = "2025-08-14"
 main = "src/entry.py"
 compatibility_flags = ["python_workers"]

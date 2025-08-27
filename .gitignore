@@ -1,2 +1,4 @@
-**/.wrangler
-**/node_modules
+.wrangler
+node_modules
+python_modules
+__pycache__

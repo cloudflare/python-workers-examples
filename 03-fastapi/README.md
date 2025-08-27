@@ -1,22 +1,15 @@
-# FastAPI Example
+# FastAPI + Jinja2 Example
 
 Warning: Python support in Workers is experimental and things will break. This
-demo is meant for reference only right now; you should be prepared to update
+example is meant for reference only right now; you should be prepared to update
 your code between now and official release time as APIs may change.
-
-Currently, Python Workers using [packages](https://developers.cloudflare.com/workers/languages/python/packages/#supported-packages)
-**cannot be deployed** and will only work in local development for the time being.
 
 ## How to Run
 
-First ensure that your Wrangler version is up to date (3.30.0 and above).
+First ensure that `uv` is installed:
+https://docs.astral.sh/uv/getting-started/installation/#standalone-installer
 
-```bash
-$ wrangler -v
- ⛅️ wrangler 3.30.0
-```
+Now, if you run `uv run pywrangler dev` within this directory, it should use the config
+in `wrangler.toml` to run the example.
 
-Now, if you run `wrangler dev` within this directory, it should use the config
-in `wrangler.toml` to run the demo.
-
-You can also run `wrangler deploy` to deploy the demo.
+You can also run `uv run pywrangler deploy` to deploy the example.
