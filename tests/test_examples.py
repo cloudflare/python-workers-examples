@@ -41,11 +41,6 @@ def test_03_fastapi(dev_server):
     assert response.headers["content-type"] == "application/json"
 
 
-@pytest.mark.xfail(reason="Not working")
-def test_04_langchain(dev_server):
-    pass
-
-
 @pytest.fixture
 def init_db():
     subprocess.run(
@@ -60,12 +55,12 @@ def init_db():
             "--file",
             "db_init.sql",
         ],
-        cwd=REPO_ROOT / "05-query-d1",
+        cwd=REPO_ROOT / "04-query-d1",
         check=True,
     )
 
 
-def test_05_query_d1(init_db, dev_server):
+def test_04_query_d1(init_db, dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -74,3 +69,8 @@ def test_05_query_d1(init_db, dev_server):
         "Dominik Picheta",
         "Hood Chatham",
     ]
+
+@pytest.mark.xfail(reason="Not working")
+def test_05_langchain(dev_server):
+    pass
+

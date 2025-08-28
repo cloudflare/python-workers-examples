@@ -14,7 +14,3 @@ dependencies = [
 dev = [
     "workers-py"
 ]
-
-
-[tool.uv.sources]
-bar = { path = "../../workers-sdk", package = true }
