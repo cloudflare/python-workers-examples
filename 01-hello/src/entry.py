@@ -1,6 +1,8 @@
 from workers import WorkerEntrypoint, Response
 
+class test:
+    async def fetch(self, request):
+        return Response("Hello from Worker B")
 
-class Default(WorkerEntrypoint):
-    async def fetch(self, request, env):
-        return Response("Hello world!")
+class Default(test, WorkerEntrypoint):
+    pass

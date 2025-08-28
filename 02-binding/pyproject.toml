@@ -10,5 +10,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "workers-py"
+    "mypy>=1.17.1",
+    "workers-py",
 ]

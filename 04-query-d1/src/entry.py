@@ -1,8 +1,8 @@
-from workers import WorkerEntrypoint, Response
+from workers import WorkerEntrypoint, Response, Request
 
 
 class Default(WorkerEntrypoint):
-    async def fetch(self, request):
+    async def fetch(self, request: Request) -> Response:
         query = """
         SELECT quote, author
         FROM qtable
@@ -13,4 +13,4 @@ class Default(WorkerEntrypoint):
         data = results.results[0]
 
         # Return a JSON response
-        return Response.json(data)
+        return Response.from_json(data)

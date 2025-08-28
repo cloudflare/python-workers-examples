@@ -1,7 +1,7 @@
 on:
   pull_request: {}
   workflow_dispatch: {}
-  push: 
+  push:
     branches:
       - main
       - master
@@ -22,5 +22,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: semgrep ci
-
-

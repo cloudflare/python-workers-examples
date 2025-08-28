@@ -1,5 +1,5 @@
 from workers import WorkerEntrypoint, Response
-
+from result import Env
 
 class Default(WorkerEntrypoint):
     async def fetch(self, request):
