@@ -69,6 +69,12 @@ def pywrangler_dev_server(directory: str):
 @pytest.fixture
 def dev_server(request):
     """Fixture that starts a dev server for the appropriate directory based on test name."""
+    if request.node.get_closest_marker("skip") or request.node.get_closest_marker(
+        "xfail"
+    ):
+        yield
+        return
+
     test_name = request.node.name
     # Extract directory name from test name (e.g., "test_01_hello" -> "01-hello")
     dir_name = test_name.replace("test_", "").replace("_", "-")
