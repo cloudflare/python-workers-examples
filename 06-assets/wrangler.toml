@@ -1,0 +1,7 @@
+name = "assets-worker"
+main = "src/worker.py"
+compatibility_flags = ["python_workers"]
+compatibility_date = "2025-08-14"
+[assets]
+directory="./assets/"
+binding="ASSETS"
