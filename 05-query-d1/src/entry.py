@@ -2,14 +2,14 @@ from workers import WorkerEntrypoint, Response
 
 
 class Default(WorkerEntrypoint):
-    async def fetch(self, request, env):
+    async def fetch(self, request):
         query = """
         SELECT quote, author
         FROM qtable
         ORDER BY RANDOM()
         LIMIT 1;
         """
-        results = await env.DB.prepare(query).all()
+        results = await self.env.DB.prepare(query).all()
         data = results.results[0]
 
         # Return a JSON response

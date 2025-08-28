@@ -1,7 +1,8 @@
-name = "hello-fastapi"
+name = "fastapi-worker"
 main = "src/worker.py"
 compatibility_flags = ["python_workers"]
-compatibility_date = "2023-12-18"
+compatibility_date = "2025-08-14"
 
 [vars]
-MESSAGE = "This is an environment variable"
+MESSAGE = "My env var"
+

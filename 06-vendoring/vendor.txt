@@ -1,2 +1,0 @@
-markupsafe
-jinja2

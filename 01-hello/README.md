@@ -6,14 +6,10 @@ your code between now and official release time as APIs may change.
 
 ## How to Run
 
-First ensure that your Wrangler version is up to date (3.30.0 and above).
+First ensure that `uv` is installed:
+https://docs.astral.sh/uv/getting-started/installation/#standalone-installer
 
-```bash
-$ wrangler -v
- ⛅️ wrangler 3.30.0
-```
-
-Now, if you run `wrangler dev` within this directory, it should use the config
+Now, if you run `uv run pywrangler dev` within this directory, it should use the config
 in `wrangler.toml` to run the example.
 
-You can also run `wrangler deploy` to deploy the example.
+You can also run `uv run pywrangler deploy` to deploy the example.
