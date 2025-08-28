@@ -70,7 +70,23 @@ def test_04_query_d1(init_db, dev_server):
         "Hood Chatham",
     ]
 
+
 @pytest.mark.xfail(reason="Not working")
 def test_05_langchain(dev_server):
     pass
 
+
+def test_06_assets(dev_server):
+    port = dev_server
+    pairs = [
+        ("", "text/html"),
+        ("image.svg", "image/svg+xml"),
+        ("style.css", "text/css; charset=utf-8"),
+        ("script.js", "application/javascript"),
+        ("favicon.ico", "image/vnd.microsoft.icon"),
+    ]
+
+    for path, content_type in pairs:
+        response = requests.get(f"http://localhost:{port}/{path}")
+        assert response.status_code == 200
+        assert response.headers["content-type"] == content_type
