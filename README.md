@@ -5,7 +5,7 @@ This is a collection of examples for [writing Cloudflare Workers in Python](http
 ## Get started
 
 1. `git clone https://github.com/cloudflare/python-workers-examples`
-2. `cd hello`
+2. `cd 01-hello`
 3. `npx wrangler@latest dev`
 4. Press the `b` key to open a browser tab, and make a request to your Worker
 
