@@ -5,14 +5,6 @@ from workers import WorkerEntrypoint
 environment = jinja2.Environment()
 template = environment.from_string("Hello, {{ name }}!")
 
-
-class Default(WorkerEntrypoint):
-    async def fetch(self, request):
-        import asgi
-
-        return await asgi.fetch(app, request.js_object, self.env)
-
-
 app = FastAPI()
 
 
@@ -33,3 +25,10 @@ async def env(req: Request):
     env = req.scope["env"]
     message = f"Here is an example of getting an environment variable: {env.MESSAGE}"
     return {"message": message}
+
+
+class Default(WorkerEntrypoint):
+    async def fetch(self, request):
+        import asgi
+
+        return await asgi.fetch(app, request.js_object, self.env)
