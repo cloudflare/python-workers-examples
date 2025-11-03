@@ -91,6 +91,7 @@ def test_06_assets(dev_server):
         assert response.status_code == 200
         assert response.headers["content-type"] == content_type
 
+
 def test_07_durable_objects(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}/room-1/show")
