@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-durable-object",
+	"main": "src/entry.py",
+	"compatibility_date": "2025-11-02",
+	"compatibility_flags": [
+		"python_workers"
+	]
+	// "durable_objects": {
+	// 	"bindings": [
+	// 		{
+	// 			"name": "COUNTER",
+	// 			"class_name": "Counter"
+	// 		}
+	// 	]
+	// },
+	// "migrations": {
+	// 	"initial": {
+	// 		"tag": "v1",
+	// 		"new_classes": ["Counter"]
+	// 	}
+	// }
+}
