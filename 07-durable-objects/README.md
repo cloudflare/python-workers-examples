@@ -1,16 +1,9 @@
-# D1 Database Query Example
-
-Warning: Python support in Workers is experimental and things will break. This
-example is meant for reference only right now; you should be prepared to update
-your code between now and official release time as APIs may change.
+# Durable Objects Example
 
 ## How to Run
 
 First ensure that `uv` is installed:
 https://docs.astral.sh/uv/getting-started/installation/#standalone-installer
-
-Run `uv run pywrangler d1 execute quotes --local --file db_init.sql` to
-initialize the d1 database.
 
 Now, if you run `uv run pywrangler dev` within this directory, it should use the config
 in `wrangler.jsonc` to run the example.

@@ -1,7 +1,7 @@
 [project]
-name = "python-d1"
+name = "python-durable-objects"
 version = "0.1.0"
-description = "Python d1 example"
+description = "Python durable objects example"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -10,5 +10,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "workers-py"
+    "workers-py",
+    "workers-runtime-sdk"
 ]

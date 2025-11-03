@@ -5,19 +5,21 @@
 	"compatibility_date": "2025-11-02",
 	"compatibility_flags": [
 		"python_workers"
-	]
-	// "durable_objects": {
-	// 	"bindings": [
-	// 		{
-	// 			"name": "COUNTER",
-	// 			"class_name": "Counter"
-	// 		}
-	// 	]
-	// },
-	// "migrations": {
-	// 	"initial": {
-	// 		"tag": "v1",
-	// 		"new_classes": ["Counter"]
-	// 	}
-	// }
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "LISTS",
+				"class_name": "List"
+			}
+		]
+	},
+	"migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "List"
+      ]
+    }
+  ]
 }

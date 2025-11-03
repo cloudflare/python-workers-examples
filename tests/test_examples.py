@@ -90,3 +90,18 @@ def test_06_assets(dev_server):
         response = requests.get(f"http://localhost:{port}/{path}")
         assert response.status_code == 200
         assert response.headers["content-type"] == content_type
+
+def test_07_durable_objects(dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}/room-1/show")
+    assert response.status_code == 200
+    assert response.text == "No messages"
+    response = requests.get(f"http://localhost:{port}/room-1/add/hi")
+    assert response.status_code == 200
+    assert response.text == "Message sent"
+    response = requests.get(f"http://localhost:{port}/room-1/show")
+    assert response.status_code == 200
+    assert response.text == "hi"
+    response = requests.get(f"http://localhost:{port}/room-2/show")
+    assert response.status_code == 200
+    assert response.text == "No messages"

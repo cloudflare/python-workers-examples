@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 
 [[package]]
@@ -77,13 +77,17 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "workers-py" },
+    { name = "workers-runtime-sdk" },
 ]
 
 [package.metadata]
 requires-dist = [{ name = "webtypy", specifier = ">=0.1.7" }]
 
 [package.metadata.requires-dev]
-dev = [{ name = "workers-py" }]
+dev = [
+    { name = "workers-py" },
+    { name = "workers-runtime-sdk" },
+]
 
 [[package]]
 name = "rich"
@@ -152,4 +156,13 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/fd/7c/9a620ed692f19010bf97e704ffe26f0dc0b70c562202bb5bb3a2f2c5b302/workers_py-1.1.5.tar.gz", hash = "sha256:5eee1534322b82eaff40fb85176fe3956aff3c4b1363e151bfbb2ba51ca24cf8", size = 31781, upload-time = "2025-08-26T11:37:40.766Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9c/48/6080eeb7101a2adfa655a7fc6f7cc3f6da62b6a25e9fa9963365911a0a51/workers_py-1.1.5-py3-none-any.whl", hash = "sha256:28465ee8b1f2050c906074653f089e0cae5c30ae99a6c683cfb300bdb3496929", size = 8095, upload-time = "2025-08-26T11:37:38.099Z" },
+]
+
+[[package]]
+name = "workers-runtime-sdk"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/90/4954e37776f0e1064002d3d338bfc33900257da6607c3799987c9cdb6776/workers_runtime_sdk-0.1.0.tar.gz", hash = "sha256:137b974130576a8631f0af8f2e6a824006f2dc845de501a7ecd2d787ed2012a6", size = 25174, upload-time = "2025-10-13T17:04:58.393Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cc/68/338ff8e8cdb232be9870cf5d761e464bb3637f0e63103533c83fe5a7030a/workers_runtime_sdk-0.1.0-py3-none-any.whl", hash = "sha256:d9503025d0cee84f04a85537330a4a6dfa68a7856233c4afbcfb64d0c9d089ae", size = 14481, upload-time = "2025-10-13T17:04:57.225Z" },
 ]
