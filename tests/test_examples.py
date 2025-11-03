@@ -82,7 +82,7 @@ def test_06_assets(dev_server):
         ("", "text/html"),
         ("image.svg", "image/svg+xml"),
         ("style.css", "text/css; charset=utf-8"),
-        ("script.js", "application/javascript"),
+        ("script.js", "text/javascript; charset=utf-8"),
         ("favicon.ico", "image/vnd.microsoft.icon"),
     ]
 
