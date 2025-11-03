@@ -9,5 +9,8 @@
 	],
 	"vars": {
 		"MESSAGE": "My env var"
+	},
+	"observability": {
+		"enabled": true
 	}
 }

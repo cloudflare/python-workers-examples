@@ -1,6 +1,5 @@
 from workers import WorkerEntrypoint, Response
 
-
 class Default(WorkerEntrypoint):
     async def fetch(self, request):
         await self.env.FOO.put("bar", "baz")

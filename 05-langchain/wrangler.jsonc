@@ -12,5 +12,8 @@
 			"globs": ["python_modules/**/*.js"],
 			"fallthrough": true
 		}
-	]
+	],
+	"observability": {
+		"enabled": true
+	}
 }

@@ -11,5 +11,8 @@
 			"binding": "FOO",
 			"id": "<YOUR_KV_NAMESPACE_ID>"
 		}
-	]
+	],
+	"observability": {
+		"enabled": true
+	}
 }

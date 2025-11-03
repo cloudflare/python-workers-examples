@@ -1,15 +1,14 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "assets-worker",
-	"main": "src/worker.py",
+	"name": "python-ai",
+	"main": "src/entry.py",
 	"compatibility_date": "2025-11-02",
 	"compatibility_flags": [
 		"python_workers"
 	],
-	"assets": {
-		"directory": "./assets/",
-		"binding": "ASSETS"
-	},
+	"ai": {
+    "binding": "AI"
+  },
 	"observability": {
 		"enabled": true
 	}
