@@ -1,4 +1,0 @@
-name = "hello-python"
-main = "src/entry.py"
-compatibility_flags = ["python_workers"]
-compatibility_date = "2025-08-14"
