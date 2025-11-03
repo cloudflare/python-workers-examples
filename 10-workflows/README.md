@@ -1,4 +1,4 @@
-# Workers AI Example
+# Workflows Example
 
 ## How to Run
 

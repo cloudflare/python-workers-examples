@@ -1,0 +1,15 @@
+[project]
+name = "python-cron"
+version = "0.1.0"
+description = "Python cron example"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "webtypy>=0.1.7",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]
