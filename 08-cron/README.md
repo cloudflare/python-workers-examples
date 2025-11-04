@@ -9,3 +9,5 @@ Now, if you run `uv run pywrangler dev` within this directory, it should use the
 in `wrangler.jsonc` to run the example.
 
 You can also run `uv run pywrangler deploy` to deploy the example.
+
+To test your scheduled handler, run: `curl "http://localhost:8787/cdn-cgi/handler/scheduled?cron=*+*+*+*+*"`
