@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "hello-python-bindings",
+	"main": "src/entry.py",
+	"compatibility_date": "2025-11-02",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"kv_namespaces": [
+		{
+			"binding": "FOO",
+			"id": "<YOUR_KV_NAMESPACE_ID>"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

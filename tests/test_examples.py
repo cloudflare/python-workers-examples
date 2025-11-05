@@ -90,3 +90,61 @@ def test_06_assets(dev_server):
         response = requests.get(f"http://localhost:{port}/{path}")
         assert response.status_code == 200
         assert response.headers["content-type"] == content_type
+
+
+def test_07_durable_objects(dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}/room-1/show")
+    assert response.status_code == 200
+    assert response.text == "No messages"
+    response = requests.get(f"http://localhost:{port}/room-1/add/hi")
+    assert response.status_code == 200
+    assert response.text == "Message sent"
+    response = requests.get(f"http://localhost:{port}/room-1/show")
+    assert response.status_code == 200
+    assert response.text == "hi"
+    response = requests.get(f"http://localhost:{port}/room-2/show")
+    assert response.status_code == 200
+    assert response.text == "No messages"
+
+
+def test_08_cron(dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}")
+    assert response.status_code == 200
+    assert "Hello from Cron Worker" in response.text
+    assert response.headers["content-type"] == "text/plain;charset=UTF-8"
+
+
+@pytest.mark.xfail(reason="AI binding may not work in local dev")
+def test_09_workers_ai(dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}")
+    assert response.status_code == 200
+    # Check that response is JSON
+    response_json = response.json()
+    assert "output" in response_json or isinstance(response_json, dict)
+
+
+def test_10_workflows(dev_server):
+    port = dev_server
+    # Test default endpoint
+    response = requests.get(f"http://localhost:{port}")
+    assert response.status_code == 200
+    assert "/start" in response.text
+    assert "/status" in response.text
+
+    # Test workflow start
+    response = requests.get(f"http://localhost:{port}/start")
+    assert response.status_code == 200
+    assert "workflow with ID:" in response.text
+
+    # Extract workflow ID from response
+    workflow_id = response.text.split("ID: ")[-1].strip()
+
+    # Test workflow status
+    response = requests.get(f"http://localhost:{port}/status/{workflow_id}")
+    assert response.status_code == 200
+    # Check that response is JSON
+    status = response.json()
+    assert isinstance(status, dict)

@@ -21,12 +21,16 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`04-query-d1/`**](04-query-d1) - shows how to query D1 with Python Workers
 - [**`05-langchain/`**](05-langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers. Currently broken.
 - [**`06-assets/`**](06-assets) — An example with an assets binding.
+- [**`07-durable-objects/`**](06-durable-objects) — An example with storing state in a [Durable Object](https://developers.cloudflare.com/durable-objects/).
+- [**`08-cron/`**](08-cron) — shows a simple [cron job](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
+- [**`09-workers-ai/`**](09-workers-ai) makes a call [Workers AI](https://developers.cloudflare.com/workers-ai/) to run inference on Cloudflare's Global Network.
+- [**`10-workflows/`**](09-workflows) — shows a durable [Workflows](https://developers.cloudflare.com/workflows/) example.
 
 
 
 ## Open Beta and Limits
 
-- Python Workers are in open beta. You can use packages in your Workers by vendoring them using the [pywrangler](https://github.com/cloudflare/workers-py?tab=readme-ov-file#pywrangler) tool.
+- Python Workers are in open beta. You can use packages in your Workers by using the [pywrangler](https://github.com/cloudflare/workers-py?tab=readme-ov-file#pywrangler) tool.
 - You must add the `python_workers` compatibility flag to your Worker while Python Workers are in open beta.
 
 We’d love your feedback. Join the `#python-workers channel` in the [Cloudflare Developers Discord](https://discord.cloudflare.com/) and let us know what you’d like to see next.

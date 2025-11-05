@@ -1,13 +1,11 @@
 [project]
-name = "hello-langchain"
+name = "python-ai"
 version = "0.1.0"
-description = "Python langchain example"
+description = "Python AI example"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "webtypy>=0.1.7",
-    "langchain_core",
-    "langchain_openai"
 ]
 
 [dependency-groups]

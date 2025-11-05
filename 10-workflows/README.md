@@ -1,8 +1,4 @@
-# Assets Handling Example
-
-Warning: Python support in Workers is experimental and things will break. This
-example is meant for reference only right now; you should be prepared to update
-your code between now and official release time as APIs may change.
+# Workflows Example
 
 ## How to Run
 

@@ -1,0 +1,17 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-cron",
+	"main": "src/entry.py",
+	"compatibility_date": "2025-11-02",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"triggers": {
+		"crons": [
+			"*/1 * * * *" // Run every 1 minute
+		]
+	},
+	"observability": {
+		"enabled": true
+	}
+}

@@ -1,8 +1,0 @@
-name = "hello-langchain"
-main = "src/worker.py"
-compatibility_flags = ["python_workers"]
-compatibility_date = "2024-01-29"
-
-rules = [
-  { type = "Data", globs = ["python_modules/**/*.js"], fallthrough = true }
-]

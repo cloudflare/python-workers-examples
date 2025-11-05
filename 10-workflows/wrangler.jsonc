@@ -1,0 +1,19 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-cron",
+	"main": "src/entry.py",
+	"compatibility_date": "2025-11-02",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"workflows": [
+    {
+      "name": "dag-workflow",
+      "binding": "MY_WORKFLOW",
+      "class_name": "DAGWorkflow"
+    }
+  ],
+	"observability": {
+		"enabled": true
+	}
+}
