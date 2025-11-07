@@ -1,7 +1,7 @@
 [project]
-name = "python-cron"
+name = "python-workflows"
 version = "0.1.0"
-description = "Python cron example"
+description = "Python workflows example"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
