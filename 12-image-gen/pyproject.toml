@@ -1,0 +1,16 @@
+[project]
+name = "python-image-gen"
+version = "0.1.0"
+description = "Python image generation example using Pillow"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "webtypy>=0.1.7",
+    "pillow",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]
