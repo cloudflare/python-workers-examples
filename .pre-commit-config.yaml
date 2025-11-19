@@ -18,6 +18,11 @@ repos:
     rev: "v2.4.1"
     hooks:
       - id: codespell
+        exclude: |
+          (?x)^(
+            .*package-lock\.json|
+            .*worker-configuration\.d\.ts
+          )$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.3

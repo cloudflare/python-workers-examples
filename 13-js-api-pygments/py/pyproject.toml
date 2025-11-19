@@ -1,0 +1,16 @@
+[project]
+name = "py-rpc-server"
+version = "0.1.0"
+description = "Python RPC server which responds to highlight_code RPC calls"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "webtypy>=0.1.7",
+    "pygments",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]
