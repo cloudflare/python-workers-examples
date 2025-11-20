@@ -1,6 +1,8 @@
-# WebSocket Stream Consumer - Bluesky Firehose
+# Wasmsockets Stream Consumer - Bluesky Firehose
 
 This example demonstrates a long-running Durable Object that connects to the Bluesky firehose (via Jetstream) and filters for post events, with rate limiting to print at most 1 per second.
+
+This is the same as 14-websocket-stream-consumer, but it uses the wasmsockets package for WebSocket connections.
 
 ## How to Run
 

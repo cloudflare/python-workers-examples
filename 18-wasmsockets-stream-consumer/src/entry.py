@@ -1,10 +1,9 @@
 from workers import WorkerEntrypoint, Response, DurableObject
-import js
+from wasmsockets.client import connect as ws_connect
 import json
 import time
-from pyodide.ffi import create_proxy
+import asyncio
 from urllib.parse import urlparse
-
 
 class BlueskyFirehoseConsumer(DurableObject):
     """Durable Object that maintains a persistent WebSocket connection to Bluesky Jetstream."""
@@ -14,6 +13,7 @@ class BlueskyFirehoseConsumer(DurableObject):
         self.websocket = None
         self.connected = False
         self.last_print_time = 0  # Track last time we printed a post
+        self.consumer_task = None  # Track the message consumer task
 
     async def fetch(self, request):
         """Handle incoming requests to the Durable Object."""
@@ -68,24 +68,36 @@ class BlueskyFirehoseConsumer(DurableObject):
                 f"Connecting to Bluesky Jetstream at {jetstream_url} (starting fresh)"
             )
 
-        # Create WebSocket using JS FFI
-        ws = js.WebSocket.new(jetstream_url)
-        self.websocket = ws
-
-        # Set up event handlers using JS FFI
-        async def on_open(event):
+        try:
+            # Connect using wasmsockets - provides a websockets-like interface
+            self.websocket = await ws_connect(jetstream_url)
             self.connected = True
+
             print("Connected to Bluesky Jetstream firehose!")
             print(
                 "Filtering for: app.bsky.feed.post (post events, rate limited to 1/sec)"
             )
+
             # Ensure alarm is set when we connect
             await self._schedule_next_alarm()
 
-        def on_message(event):
+            # Start consuming messages in the background
+            self.consumer_task = asyncio.create_task(self._consume_messages())
+
+        except Exception as e:
+            print(f"Failed to connect to Jetstream: {e}")
+            self.connected = False
+            self.ctx.abort(f"WebSocket connection failed: {e}")
+
+    async def _consume_messages(self):
+        """Consume messages from the WebSocket connection."""
+        while self.connected and self.websocket:
+            # Receive message from WebSocket
             try:
+                message = await self.websocket.recv()
+
                 # Parse the JSON message
-                data = json.loads(event.data)
+                data = json.loads(message)
 
                 # Store the timestamp for resumption on reconnect
                 time_us = data.get("time_us")
@@ -110,33 +122,13 @@ class BlueskyFirehoseConsumer(DurableObject):
                             # Update last print time
                             self.last_print_time = current_time
 
+            except json.JSONDecodeError as e:
+                print(f"Error parsing message JSON: {e}")
             except Exception as e:
                 print(f"Error processing message: {e}")
+                self.connected = False
+                self.ctx.abort(f"WebSocket message processing failed: {e}")
 
-        def on_error(event):
-            print(f"WebSocket error: {event}")
-            self.connected = False
-            self.ctx.abort("WebSocket error occurred")
-
-        async def on_close(event):
-            print(f"WebSocket closed: code={event.code}, reason={event.reason}")
-            self.connected = False
-            self.ctx.abort("WebSocket closed unexpectedly")
-
-        # Attach event handlers
-        #
-        # Note that ordinarily proxies need to be destroyed once they are no longer used.
-        # However, in this Durable Object context, the WebSocket and its event listeners
-        # persist for the lifetime of the Durable Object, so we don't explicitly destroy
-        # the proxies here. When the websocket connection closes, the Durable Object
-        # is restarted which destroys these proxies.
-        #
-        # In the future, we plan to provide support for native Python websocket APIs which
-        # should eliminate the need for proxy wrappers.
-        ws.addEventListener("open", create_proxy(on_open))
-        ws.addEventListener("message", create_proxy(on_message))
-        ws.addEventListener("error", create_proxy(on_error))
-        ws.addEventListener("close", create_proxy(on_close))
 
 
 class Default(WorkerEntrypoint):

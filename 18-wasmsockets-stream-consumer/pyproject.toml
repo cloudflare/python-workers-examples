@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "webtypy>=0.1.7",
+    "wasmsockets @ git+https://github.com/dom96/wasmsockets.git@main",
 ]
 
 [dependency-groups]

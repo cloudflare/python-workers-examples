@@ -2,9 +2,9 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "python-websocket-stream-consumer",
 	"main": "src/entry.py",
-	"compatibility_date": "2025-11-02",
+	"compatibility_date": "2026-08-02",
 	"compatibility_flags": [
-		"python_workers"
+		"python_workers",
 	],
 	"observability": {
 		"enabled": true
@@ -14,7 +14,7 @@
 			{
 				"name": "BLUESKY_FIREHOSE",
 				"class_name": "BlueskyFirehoseConsumer",
-				"script_name": "python-websocket-stream-consumer"
+				"script_name": "python-websocket-stream-consumer-313-old-date"
 			}
 		]
 	},

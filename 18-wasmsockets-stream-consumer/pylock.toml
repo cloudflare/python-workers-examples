@@ -1,0 +1,20 @@
+lock-version = "1.0"
+created-by = "uv"
+requires-python = ">=3.13.2"
+
+[[packages]]
+name = "wasmsockets"
+version = "0.1.4"
+vcs = { type = "git", url = "https://github.com/dom96/wasmsockets.git", requested-revision = "main", commit-id = "ce04386fe11c5e6a13c02a1a62a58848b87cf0a6" }
+
+[[packages]]
+name = "webtypy"
+version = "0.1.7"
+sdist = { url = "https://files.pythonhosted.org/packages/5e/89/c7a0311fdc73809fc2415be97767f085ff3e00c86546430034dc8465fee7/webtypy-0.1.7.tar.gz", upload-time = 2023-11-21T19:23:26Z, size = 104505, hashes = { sha256 = "1b7212719a949c802f3d60fac5f0d952eb503a92121409cf1ad9847d7c76a336" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/61/91/c731bdaa605279e00b28bfd2bf0ae67f48061d16890fb1c026924bfbd242/webtypy-0.1.7-py3-none-any.whl", upload-time = 2023-11-21T19:23:23Z, size = 103519, hashes = { sha256 = "f35e6d73a4e08783e23adfac271a11cda3a2bd1105499db70e4819244efed0ae" } }]
+
+[[packages]]
+name = "workers-runtime-sdk"
+version = "1.6.2"
+sdist = { url = "https://files.pythonhosted.org/packages/34/d8/c6d4833f80eca805d25549903eb0405cfa5afaf8f5985bccec2f0619c4f6/workers_runtime_sdk-1.6.2.tar.gz", upload-time = 2026-07-09T20:29:46Z, size = 43191, hashes = { sha256 = "668905416c072446e318b328f5b12b56177eacb86817f5fcc14644b4bc17f9d0" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/81/d7/d2c561d5ce144cd5a33ec6d75fb8b351b574b089fd4047ba853e7fa4410a/workers_runtime_sdk-1.6.2-py3-none-any.whl", upload-time = 2026-07-09T20:29:45Z, size = 32247, hashes = { sha256 = "8ce2c96347965540d7ccf2f83418729c29f23d25e2b9bafbce2b3b88d6ad28f3" } }]
