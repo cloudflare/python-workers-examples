@@ -5,6 +5,7 @@ import time
 import asyncio
 from urllib.parse import urlparse
 
+
 class BlueskyFirehoseConsumer(DurableObject):
     """Durable Object that maintains a persistent WebSocket connection to Bluesky Jetstream."""
 
@@ -128,7 +129,6 @@ class BlueskyFirehoseConsumer(DurableObject):
                 print(f"Error processing message: {e}")
                 self.connected = False
                 self.ctx.abort(f"WebSocket message processing failed: {e}")
-
 
 
 class Default(WorkerEntrypoint):
