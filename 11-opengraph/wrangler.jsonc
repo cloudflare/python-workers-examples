@@ -1,0 +1,12 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-opengraph",
+	"main": "src/entry.py",
+	"compatibility_date": "2025-11-02",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"observability": {
+		"enabled": true
+	}
+}
