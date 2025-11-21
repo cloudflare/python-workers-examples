@@ -1,0 +1,15 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ts-rpc-client",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-11-19",
+	"observability": {
+		"enabled": true
+	},
+	"services": [
+		{
+			"binding": "PYTHON_RPC",
+			"service": "py-rpc-server"
+		}
+	]
+}
