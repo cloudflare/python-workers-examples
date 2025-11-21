@@ -36,9 +36,7 @@ class Default(WorkerEntrypoint):
             }
 
         # Create formatter with line numbers and styling
-        formatter = HtmlFormatter(
-            linenos=True, cssclass="highlight", style="monokai"
-        )
+        formatter = HtmlFormatter(linenos=True, cssclass="highlight", style="monokai")
 
         # Generate highlighted HTML
         highlighted_html = highlight(code, lexer, formatter)
@@ -52,5 +50,3 @@ class Default(WorkerEntrypoint):
             "language": lexer.name,
             "language_alias": lexer.aliases[0] if lexer.aliases else None,
         }
-
-
