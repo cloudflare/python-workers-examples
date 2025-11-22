@@ -27,6 +27,4 @@ class Default(WorkerEntrypoint):
         if path in ["/", "/index.html"]:
             return Response(INDEX_PAGE, headers={"Content-Type": "text/html"})
 
-        # TODO: Once https://github.com/cloudflare/workerd/pull/4926 is released, can do
-        # self.env.ASSETS.fetch(request) without the .js_object
-        return await self.env.ASSETS.fetch(request.js_object)
+        return await self.env.ASSETS.fetch(request)
