@@ -1,6 +1,7 @@
-from workers import WorkerEntrypoint, Response, DurableObject
-from pyodide.ffi import to_js
 from urllib.parse import urlparse
+
+from pyodide.ffi import to_js
+from workers import DurableObject, Response, WorkerEntrypoint
 
 
 class List(DurableObject):
@@ -12,7 +13,6 @@ class List(DurableObject):
         messages = await self.get_messages()
         messages.append(message)
         await self.ctx.storage.put("messages", to_js(messages))
-        return
 
 
 class Default(WorkerEntrypoint):

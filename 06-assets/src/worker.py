@@ -1,5 +1,6 @@
-from workers import WorkerEntrypoint, Response
 from urllib.parse import urlparse
+
+from workers import Response, WorkerEntrypoint
 
 INDEX_PAGE = """
 <!DOCTYPE html>

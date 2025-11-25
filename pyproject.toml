@@ -13,3 +13,21 @@ dev = [
     "requests>=2.32.5",
     "ruff>=0.12.10",
 ]
+
+[tool.ruff]
+lint.select = [
+  "B0",     # bugbear (all B0* checks enabled by default)
+  "B904",   # bugbear (Within an except clause, raise exceptions with raise ... from err)
+  "B905",   # bugbear (zip() without an explicit strict= parameter set.)
+  "C4",     # flake8-comprehensions
+  "C9",     # mccabe complexity
+  "E",      # pycodestyles
+  "F",      # pyflakes
+  "I",      # isort
+  "PERF",   # Perflint
+  "PGH",    # pygrep-hooks
+  "PL",     # Pylint
+  "UP",     # pyupgrade
+  "W",      # pycodestyles
+]
+lint.ignore = ["PLR2004", "E501"]
