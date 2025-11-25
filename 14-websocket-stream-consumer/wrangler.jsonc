@@ -1,0 +1,29 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-websocket-stream-consumer",
+	"main": "src/entry.py",
+	"compatibility_date": "2025-11-02",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"observability": {
+		"enabled": true
+	},
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "BLUESKY_FIREHOSE",
+				"class_name": "BlueskyFirehoseConsumer",
+				"script_name": "python-websocket-stream-consumer"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"BlueskyFirehoseConsumer"
+			]
+		}
+	]
+}
