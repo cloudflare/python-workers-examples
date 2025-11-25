@@ -1,9 +1,10 @@
-from workers import WorkerEntrypoint, Response, DurableObject
-import js
 import json
 import time
-from pyodide.ffi import create_proxy
 from urllib.parse import urlparse
+
+import js
+from pyodide.ffi import create_proxy
+from workers import DurableObject, Response, WorkerEntrypoint
 
 
 class BlueskyFirehoseConsumer(DurableObject):
