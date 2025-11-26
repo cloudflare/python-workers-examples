@@ -1,3 +1,4 @@
+import asgi
 import jinja2
 from fastapi import FastAPI, Request
 from workers import WorkerEntrypoint
@@ -29,6 +30,4 @@ async def env(req: Request):
 
 class Default(WorkerEntrypoint):
     async def fetch(self, request):
-        import asgi
-
         return await asgi.fetch(app, request.js_object, self.env)
