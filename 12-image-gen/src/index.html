@@ -1,0 +1,125 @@
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Pillow Image Generation Demo</title>
+            <style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 40px 20px;
+                    background: #f5f5f5;
+                }
+                h1 { color: #333; }
+                h2 { color: #666; margin-top: 30px; }
+                .endpoint {
+                    background: white;
+                    padding: 20px;
+                    margin: 20px 0;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                .endpoint h3 { margin-top: 0; color: #2196F3; }
+                .example {
+                    background: #f9f9f9;
+                    padding: 15px;
+                    border-radius: 4px;
+                    margin: 10px 0;
+                }
+                .example img {
+                    max-width: 100%;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    margin-top: 10px;
+                }
+                code {
+                    background: #f0f0f0;
+                    padding: 2px 6px;
+                    border-radius: 3px;
+                    font-family: 'Courier New', monospace;
+                }
+                a { color: #2196F3; text-decoration: none; }
+                a:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <h1>🎨 Pillow Image Generation Demo</h1>
+            <p>This Python Worker demonstrates dynamic image generation using the Pillow library.</p>
+
+            <div class="endpoint">
+                <h3>1. Gradient Generator</h3>
+                <p>Generate gradient images with custom colors and dimensions.</p>
+                <p><strong>Endpoint:</strong> <code>/gradient</code></p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>width</code> - Image width (default: 800)</li>
+                    <li><code>height</code> - Image height (default: 400)</li>
+                    <li><code>color1</code> - Start color in hex (default: random)</li>
+                    <li><code>color2</code> - End color in hex (default: random)</li>
+                </ul>
+                <div class="example">
+                    <strong>Example:</strong> <a href="/gradient?width=600&height=300&color1=FF6B6B&color2=4ECDC4">/gradient?width=600&height=300&color1=FF6B6B&color2=4ECDC4</a>
+                    <br><img src="/gradient?width=600&height=200&color1=FF6B6B&color2=4ECDC4" alt="Gradient example">
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>2. Badge Generator</h3>
+                <p>Create custom badges or buttons with text.</p>
+                <p><strong>Endpoint:</strong> <code>/badge</code></p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>text</code> - Badge text (default: "Hello World")</li>
+                    <li><code>bg_color</code> - Background color in hex (default: #4CAF50)</li>
+                    <li><code>text_color</code> - Text color in hex (default: #FFFFFF)</li>
+                </ul>
+                <div class="example">
+                    <strong>Example:</strong> <a href="/badge?text=Python+Workers&bg_color=2196F3&text_color=FFFFFF">/badge?text=Python+Workers&bg_color=2196F3&text_color=FFFFFF</a>
+                    <br><img src="/badge?text=Python+Workers&bg_color=2196F3&text_color=FFFFFF" alt="Badge example">
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>3. Placeholder Generator</h3>
+                <p>Generate placeholder images with dimensions displayed.</p>
+                <p><strong>Endpoint:</strong> <code>/placeholder</code></p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>width</code> - Image width (default: 400)</li>
+                    <li><code>height</code> - Image height (default: 300)</li>
+                    <li><code>bg_color</code> - Background color in hex (default: #CCCCCC)</li>
+                    <li><code>text_color</code> - Text color in hex (default: #666666)</li>
+                </ul>
+                <div class="example">
+                    <strong>Example:</strong> <a href="/placeholder?width=500&height=300">/placeholder?width=500&height=300</a>
+                    <br><img src="/placeholder?width=500&height=200" alt="Placeholder example">
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>4. Chart Generator</h3>
+                <p>Create simple bar charts with custom data.</p>
+                <p><strong>Endpoint:</strong> <code>/chart</code></p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>values</code> - Comma-separated values (default: 10,25,15,30,20)</li>
+                    <li><code>labels</code> - Comma-separated labels (default: A,B,C,D,E)</li>
+                    <li><code>color</code> - Bar color in hex (default: #2196F3)</li>
+                </ul>
+                <div class="example">
+                    <strong>Example:</strong> <a href="/chart?values=15,30,25,40,20&labels=Mon,Tue,Wed,Thu,Fri">/chart?values=15,30,25,40,20&labels=Mon,Tue,Wed,Thu,Fri</a>
+                    <br><img src="/chart?values=15,30,25,40,20&labels=Mon,Tue,Wed,Thu,Fri" alt="Chart example">
+                </div>
+            </div>
+
+            <h2>💡 Tips</h2>
+            <ul>
+                <li>All hex colors should be provided without the # symbol in URLs</li>
+                <li>Use URL encoding for special characters (e.g., spaces as +)</li>
+                <li>Images are cached for 1 hour by default</li>
+                <li>Pillow supports many more features - check the <a href="https://pillow.readthedocs.io/">documentation</a></li>
+            </ul>
+        </body>
+        </html>
