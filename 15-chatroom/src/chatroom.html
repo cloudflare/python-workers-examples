@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatroom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f7;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            max-height: 700px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f6821f 0%, #ff6b35 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .python-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .python-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(to bottom, #3776ab 50%, #ffd343 50%);
+            border-radius: 4px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .python-icon::before,
+        .python-icon::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .python-icon::before {
+            top: 3px;
+            left: 3px;
+        }
+
+        .python-icon::after {
+            bottom: 3px;
+            right: 3px;
+            background: #3776ab;
+        }
+
+        .room-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tech-stack {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .status {
+            padding: 10px 20px;
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .status.connected {
+            background: #f0fff4;
+            color: #38a169;
+        }
+
+        .status.disconnected {
+            background: #fff5f5;
+            color: #e53e3e;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f7fafc;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .message-username {
+            font-weight: 600;
+            color: #2d3748;
+            margin-right: 8px;
+        }
+
+        .message-timestamp {
+            font-size: 12px;
+            color: #a0aec0;
+        }
+
+        .message-text {
+            color: #4a5568;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.system {
+            text-align: center;
+            color: #718096;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .username-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .username-input input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .username-input input:focus {
+            outline: none;
+            border-color: #f6821f;
+        }
+
+        .message-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .message-input input:focus {
+            outline: none;
+            border-color: #f6821f;
+        }
+
+        .message-input button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f6821f 0%, #ff6b35 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .message-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(246, 130, 31, 0.4);
+        }
+
+        .message-input button:active {
+            transform: translateY(0);
+        }
+
+        .message-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .room-selector {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .room-selector input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="python-badge">
+                <span class="python-icon"></span>
+                <span>Python Workers</span>
+            </div>
+            <h1>💬 Chatroom</h1>
+            <div class="room-info">Room: <span id="roomName">general</span></div>
+            <div class="tech-stack">WebSockets · Durable Objects · Hibernation API</div>
+        </div>
+
+        <div class="status" id="status">Connecting...</div>
+
+        <div class="messages" id="messages"></div>
+
+        <div class="input-area">
+            <div class="username-input">
+                <input
+                    type="text"
+                    id="usernameInput"
+                    placeholder="Your username"
+                    maxlength="20"
+                />
+            </div>
+            <div class="message-input">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Type a message..."
+                    disabled
+                />
+                <button id="sendButton" disabled>Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let username = localStorage.getItem('chatUsername') || '';
+        let currentRoom = 'general';
+
+        const statusEl = document.getElementById('status');
+        const messagesEl = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const usernameInput = document.getElementById('usernameInput');
+        const roomNameEl = document.getElementById('roomName');
+
+        // Initialize username input
+        usernameInput.value = username;
+
+        // Get room from URL hash or default to 'general'
+        if (window.location.hash) {
+            currentRoom = window.location.hash.substring(1);
+        }
+        roomNameEl.textContent = currentRoom;
+
+        // Save username when changed
+        usernameInput.addEventListener('input', (e) => {
+            username = e.target.value.trim();
+            localStorage.setItem('chatUsername', username);
+        });
+
+        // Connect to WebSocket
+        function connect() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/room/${currentRoom}`;
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                statusEl.textContent = '✓ Connected';
+                statusEl.className = 'status connected';
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+
+                    if (data.type === 'history') {
+                        // Display message history
+                        data.messages.forEach(msg => displayMessage(msg));
+                    } else if (data.type === 'system') {
+                        displaySystemMessage(data.text);
+                    } else if (data.type === 'message') {
+                        displayMessage(data);
+                    }
+                } catch (e) {
+                    console.error('Error parsing message:', e);
+                }
+            };
+
+            ws.onclose = () => {
+                statusEl.textContent = '✗ Disconnected';
+                statusEl.className = 'status disconnected';
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+
+                // Attempt to reconnect after 3 seconds
+                setTimeout(connect, 3000);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        function displayMessage(msg) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'message-header';
+
+            const usernameSpan = document.createElement('span');
+            usernameSpan.className = 'message-username';
+            usernameSpan.textContent = msg.username;
+
+            const timestampSpan = document.createElement('span');
+            timestampSpan.className = 'message-timestamp';
+            timestampSpan.textContent = formatTimestamp(msg.timestamp);
+
+            headerDiv.appendChild(usernameSpan);
+            headerDiv.appendChild(timestampSpan);
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.textContent = msg.text;
+
+            messageDiv.appendChild(headerDiv);
+            messageDiv.appendChild(textDiv);
+
+            messagesEl.appendChild(messageDiv);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function displaySystemMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            messageDiv.textContent = text;
+
+            messagesEl.appendChild(messageDiv);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            const currentUsername = username || 'Anonymous';
+
+            const message = {
+                username: currentUsername,
+                text: text
+            };
+
+            ws.send(JSON.stringify(message));
+            messageInput.value = '';
+        }
+
+        // Send message on button click
+        sendButton.addEventListener('click', sendMessage);
+
+        // Send message on Enter key
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Handle room changes via hash
+        window.addEventListener('hashchange', () => {
+            const newRoom = window.location.hash.substring(1) || 'general';
+            if (newRoom !== currentRoom) {
+                currentRoom = newRoom;
+                roomNameEl.textContent = currentRoom;
+                messagesEl.innerHTML = '';
+                if (ws) {
+                    ws.close();
+                }
+                connect();
+            }
+        });
+
+        // Initial connection
+        connect();
+    </script>
+</body>
+</html>
