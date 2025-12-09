@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django-CF with D1 - Serverless Django</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-spin-custom {
+            animation: spin 1s linear infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <!-- Status Message Container -->
+    <div id="statusContainer"></div>
+
+    <!-- Header -->
+    <header class="border-b border-slate-700/50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center font-bold text-lg">
+                        ⚡
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text">django-cf</h1>
+                        <p class="text-xs text-slate-400">Django on Cloudflare Workers</p>
+                    </div>
+                </div>
+                <div class="px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-sm text-emerald-300">
+                    ✨ Ready to Deploy
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Hero Section -->
+        <section class="text-center mb-20 animate-fade-in-up">
+            <h2 class="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
+                <span class="gradient-text">Django on the Edge</span>
+            </h2>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                A powerful Django template running on Cloudflare Workers with D1 database. Get started by running migrations, creating an admin user, and exploring the included blog example.
+            </p>
+        </section>
+
+        <!-- Action Cards Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+            <!-- Run Migrations Card -->
+            <div class="glass-effect rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 group" style="animation-delay: 0.1s" class="animate-fade-in-up">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-2xl">
+                        🔧
+                    </div>
+                    <div id="migrationStatus" class="text-xs font-semibold text-slate-400"></div>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Run Migrations</h3>
+                <p class="text-slate-300 mb-6 leading-relaxed">
+                    Initialize your database schema. This creates all necessary tables and relationships in your D1 database.
+                </p>
+                <button onclick="runMigrations()" id="migrationsBtn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
+                    <span id="migrationsText">Run Migrations</span>
+                    <span id="migrationsSpinner" class="hidden animate-spin-custom">⏳</span>
+                </button>
+            </div>
+
+            <!-- Create Admin Card -->
+            <div class="glass-effect rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 group" style="animation-delay: 0.2s" class="animate-fade-in-up">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-2xl">
+                        👤
+                    </div>
+                    <div id="adminStatus" class="text-xs font-semibold text-slate-400"></div>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Create Admin User</h3>
+                <p class="text-slate-300 mb-2 leading-relaxed">
+                    Create a superuser account for the Django admin interface.
+                </p>
+                <p class="text-sm text-emerald-300 mb-6 font-semibold">
+                    Default credentials: <span class="font-mono">admin</span> / <span class="font-mono">password</span>
+                </p>
+                <button onclick="createAdmin()" id="adminBtn" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
+                    <span id="adminText">Create Admin</span>
+                    <span id="adminSpinner" class="hidden animate-spin-custom">⏳</span>
+                </button>
+            </div>
+
+            <!-- Admin Panel Card -->
+            <div class="glass-effect rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 group" style="animation-delay: 0.3s" class="animate-fade-in-up">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl">
+                        ⚙️
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Admin Panel</h3>
+                <p class="text-slate-300 mb-6 leading-relaxed">
+                    Access Django admin to manage content, users, and configuration. Make sure you've created an admin user first.
+                </p>
+                <a href="/admin/" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 no-underline">
+                    Open Admin Panel →
+                </a>
+            </div>
+
+            <!-- Blog Card -->
+            <div class="glass-effect rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 group" style="animation-delay: 0.4s" class="animate-fade-in-up">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-2xl">
+                        📝
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Blog Example</h3>
+                <p class="text-slate-300 mb-6 leading-relaxed">
+                    Explore a sample blog application to see Django in action. Run migrations first to create the database tables.
+                </p>
+                <a href="/blog/" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 no-underline">
+                    View Blog →
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="glass-effect rounded-2xl p-12 mb-20">
+            <h3 class="text-3xl font-bold text-center mb-12">Powered by Modern Technology</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl mb-4">🐍</div>
+                    <h4 class="font-bold text-lg mb-2">Django</h4>
+                    <p class="text-slate-400 text-sm">Full-featured web framework</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl mb-4">☁️</div>
+                    <h4 class="font-bold text-lg mb-2">Cloudflare Workers</h4>
+                    <p class="text-slate-400 text-sm">Serverless edge computing</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl mb-4">💾</div>
+                    <h4 class="font-bold text-lg mb-2">D1 Database</h4>
+                    <p class="text-slate-400 text-sm">Serverless SQL database</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h4 class="font-bold text-lg mb-2">High Performance</h4>
+                    <p class="text-slate-400 text-sm">Lightning-fast globally</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-700/50 mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                <p class="text-slate-400">Built with ❤️ for serverless Django</p>
+                <div class="flex gap-6">
+                    <a href="https://github.com/G4brym/django-cf" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition-colors">GitHub</a>
+                    <a href="https://developers.cloudflare.com/d1/" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition-colors">D1 Docs</a>
+                    <a href="https://docs.djangoproject.com/" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition-colors">Django Docs</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showStatus(message, type = 'success') {
+            const container = document.getElementById('statusContainer');
+            const bgColor = type === 'success' ? 'bg-emerald-500/20 border-emerald-500/50' : 'bg-red-500/20 border-red-500/50';
+            const textColor = type === 'success' ? 'text-emerald-300' : 'text-red-300';
+
+            const statusEl = document.createElement('div');
+            statusEl.className = `status-message glass-effect rounded-lg px-6 py-3 ${bgColor} ${textColor} font-semibold`;
+            statusEl.textContent = message;
+
+            container.innerHTML = '';
+            container.appendChild(statusEl);
+
+            setTimeout(() => {
+                statusEl.remove();
+            }, 4000);
+        }
+
+        async function runMigrations() {
+            const btn = document.getElementById('migrationsBtn');
+            const text = document.getElementById('migrationsText');
+            const spinner = document.getElementById('migrationsSpinner');
+            const status = document.getElementById('migrationStatus');
+
+            btn.disabled = true;
+            text.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            status.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/__run_migrations__/');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    showStatus('✓ Migrations completed successfully!', 'success');
+                    status.textContent = '✓ Done';
+                    status.classList.add('text-emerald-400');
+                } else {
+                    showStatus('✗ ' + data.message, 'error');
+                    status.textContent = '✗ Error';
+                    status.classList.add('text-red-400');
+                }
+            } catch (error) {
+                showStatus('✗ Failed to run migrations', 'error');
+                status.textContent = '✗ Error';
+                status.classList.add('text-red-400');
+            } finally {
+                btn.disabled = false;
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+
+        async function createAdmin() {
+            const btn = document.getElementById('adminBtn');
+            const text = document.getElementById('adminText');
+            const spinner = document.getElementById('adminSpinner');
+            const status = document.getElementById('adminStatus');
+
+            btn.disabled = true;
+            text.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            status.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/__create_admin__/');
+                const data = await response.json();
+
+                if (data.status === 'success' || data.status === 'info') {
+                    showStatus('✓ Admin user ready! Use admin / password', 'success');
+                    status.textContent = '✓ Done';
+                    status.classList.add('text-emerald-400');
+                } else {
+                    showStatus('✗ ' + data.message, 'error');
+                    status.textContent = '✗ Error';
+                    status.classList.add('text-red-400');
+                }
+            } catch (error) {
+                showStatus('✗ Failed to create admin user', 'error');
+                status.textContent = '✗ Error';
+                status.classList.add('text-red-400');
+            } finally {
+                btn.disabled = false;
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
