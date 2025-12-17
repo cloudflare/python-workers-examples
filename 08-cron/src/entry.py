@@ -3,7 +3,7 @@ from workers import WorkerEntrypoint, Response
 
 class Default(WorkerEntrypoint):
     # runs based on "triggers" in wrangler config
-    async def scheduled(self, controller, env, ctx):
+    async def scheduled(self, controller):
         print("Scheduled task has been executed.")
 
     async def fetch(self):
