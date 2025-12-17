@@ -79,7 +79,7 @@ def test_05_langchain(dev_server):
 def test_06_assets(dev_server):
     port = dev_server
     pairs = [
-        ("", "text/html"),
+        ("", "text/html; charset=utf-8"),
         ("image.svg", "image/svg+xml"),
         ("style.css", "text/css; charset=utf-8"),
         ("script.js", "text/javascript; charset=utf-8"),
