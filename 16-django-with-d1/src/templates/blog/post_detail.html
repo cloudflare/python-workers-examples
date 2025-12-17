@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <article class="glass-effect rounded-2xl p-12">
+        <div class="mb-8">
+            <a href="{% url 'blog:post_list' %}" class="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold transition-colors mb-6 no-underline">
+                ← Back to Posts
+            </a>
+            <h1 class="text-5xl font-bold mb-4">{{ post.title }}</h1>
+            <div class="flex items-center gap-4 text-slate-400">
+                <span class="text-sm">📅 Published on {{ post.pub_date|date:"F d, Y" }}</span>
+            </div>
+        </div>
+
+        <div class="prose prose-invert max-w-none">
+            <div class="text-slate-300 leading-relaxed whitespace-pre-wrap">{{ post.content }}</div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-slate-700/50">
+            <a href="{% url 'blog:post_list' %}" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 no-underline">
+                ← Back to All Posts
+            </a>
+        </div>
+    </article>
+{% endblock %}

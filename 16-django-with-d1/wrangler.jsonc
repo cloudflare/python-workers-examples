@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "django-on-workers-with-d1",
+  "main": "src/index.py",
+  "compatibility_flags": [
+    "python_workers"
+  ],
+  "compatibility_date": "2025-11-30",
+  "assets": {
+    "directory": "./staticfiles"
+  },
+  "build": {
+    "command": "WORKERS_CI=1 python src/manage.py collectstatic --noinput"
+  },
+  "python_modules": {
+    "exclude": [
+      "**/*.pyc",
+      "**/__pycache__",
+      "**/*.po",
+      "**/*.css",
+      "**/*.js",
+      "**/*.svg",
+      "**/*.png",
+      "**/*.jpg"
+    ]
+  },
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "django-on-workers",
+      "database_id": "590ad313-29a0-422f-9c9e-1124d9b56ad0"
+    }
+  ]
+}
