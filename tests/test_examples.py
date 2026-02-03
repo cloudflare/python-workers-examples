@@ -84,6 +84,7 @@ def test_06_assets(dev_server):
         ("style.css", "text/css; charset=utf-8"),
         ("script.js", "text/javascript; charset=utf-8"),
         ("favicon.ico", "image/vnd.microsoft.icon"),
+        ("painting.jpg", "image/jpeg")
     ]
 
     for path, content_type in pairs:
