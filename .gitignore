@@ -3,3 +3,5 @@ node_modules
 python_modules
 __pycache__
 CLAUDE.md
+**/uv.lock
+!/uv.lock
