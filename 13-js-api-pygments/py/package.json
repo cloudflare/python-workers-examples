@@ -8,6 +8,6 @@
 		"start": "uv run pywrangler dev"
 	},
 	"devDependencies": {
-		"wrangler": "^4.49.0"
+		"wrangler": "^4.64.0"
 	}
 }
