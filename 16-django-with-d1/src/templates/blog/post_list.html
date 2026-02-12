@@ -1,0 +1,44 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Blog Posts{% endblock %}
+
+{% block content %}
+    <div class="mb-12">
+        <h2 class="text-4xl font-bold mb-2">Latest Posts</h2>
+        <p class="text-slate-400">Explore articles and updates from our blog</p>
+    </div>
+
+    {% if posts %}
+        <div class="space-y-6">
+            {% for post in posts %}
+                <article class="glass-effect rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">
+                                <a href="{% url 'blog:post_detail' post.pk %}" class="no-underline text-white hover:text-emerald-400">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            <p class="text-sm text-slate-400">
+                                📅 {{ post.pub_date|date:"F d, Y" }}
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 line-clamp-2 mb-4">{{ post.content }}</p>
+                    <a href="{% url 'blog:post_detail' post.pk %}" class="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                        Read More →
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="glass-effect rounded-2xl p-12 text-center">
+            <div class="text-6xl mb-4">📝</div>
+            <h3 class="text-2xl font-bold mb-2">No Posts Yet</h3>
+            <p class="text-slate-400 mb-6">There are no blog posts available at the moment.</p>
+            <a href="/" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 no-underline">
+                Back to Home →
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}
