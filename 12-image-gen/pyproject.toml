@@ -5,7 +5,6 @@ description = "Python image generation example using Pillow"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "webtypy>=0.1.7",
     "pillow",
 ]
 
