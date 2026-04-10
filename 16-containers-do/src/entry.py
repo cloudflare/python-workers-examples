@@ -1,5 +1,4 @@
 import asyncio
-import js
 
 from workers import WorkerEntrypoint, Response, DurableObject
 
