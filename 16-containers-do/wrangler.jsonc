@@ -1,0 +1,35 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-container-do",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-04-09",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"containers": [
+		{
+			"class_name": "MyContainer",
+			"image": "./container/Dockerfile",
+			"max_instances": 5
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MY_CONTAINER",
+				"class_name": "MyContainer"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"MyContainer"
+			]
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
