@@ -1,4 +1,5 @@
 import asyncio
+import js
 
 from workers import WorkerEntrypoint, Response, DurableObject
 
@@ -18,8 +19,8 @@ class MyContainer(DurableObject):
 
         for _ in range(MAX_RETRIES):
             try:
-                return await port.fetch(url, request)
-            except Exception:
+                return await port.fetch(url)
+            except Exception:  # container not ready
                 await asyncio.sleep(RETRY_INTERVAL)
 
         return Response("Container failed to start", status=503)
