@@ -24,7 +24,22 @@ async def say_hi(name: str):
 async def env(req: Request):
     env = req.scope["env"]
     message = f"Here is an example of getting an environment variable: {env.MESSAGE}"
-    return {"message": message}
+
+    # D1 SQL Database
+    query = "SELECT * FROM users;"
+    results = await env.DB.prepare(query).all()
+
+    users = []
+
+    for result in results.results:
+        users.append({
+            "id": result.id,
+            "name": result.name,
+            "age": result.age
+        }) # This is how to access the <class 'pyodide.ffi.JsProxy'> object.
+
+    return {"message": message, "users": users}
+
 
 
 class Default(WorkerEntrypoint):
