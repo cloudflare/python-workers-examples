@@ -32,14 +32,11 @@ async def env(req: Request):
     users = []
 
     for result in results.results:
-        users.append({
-            "id": result.id,
-            "name": result.name,
-            "age": result.age
-        }) # This is how to access the <class 'pyodide.ffi.JsProxy'> object.
+        users.append(
+            {"id": result.id, "name": result.name, "age": result.age}
+        )  # This is how to access the <class 'pyodide.ffi.JsProxy'> object.
 
     return {"message": message, "users": users}
-
 
 
 class Default(WorkerEntrypoint):
