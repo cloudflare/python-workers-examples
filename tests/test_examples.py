@@ -110,6 +110,25 @@ def test_07_durable_objects(dev_server):
     assert response.text == "No messages"
 
 
+def test_16_sync_http_clients(dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}/sync")
+    assert response.status_code == 200
+
+    results = response.json()["results"]
+    assert [result["client"] for result in results] == [
+        "requests",
+        "urllib3",
+        "httpx.Client",
+    ]
+
+    for result in results:
+        assert result["status_code"] == 200
+        assert result["ok"] is True
+        assert result["saw_expected_text"] is True
+
+
+
 def test_08_cron(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
