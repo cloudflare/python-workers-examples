@@ -110,6 +110,94 @@ def test_07_durable_objects(dev_server):
     assert response.text == "No messages"
 
 
+def test_17_r2(dev_server):
+    port = dev_server
+    base = f"http://localhost:{port}"
+
+    response = requests.get(base)
+    assert response.status_code == 200
+    root = response.json()
+    assert root["example"] == "Cloudflare R2 from a Python Worker"
+    assert root["large_files"]["hvsc"]["key"] == "vsc/84/raw/HVSC_84-all-of-them.7z"
+    assert root["large_files"]["shakespeare"]["key"] == "pg100-h.zip"
+    assert root["large_files"]["shakespeare"]["source_url"] == "https://www.gutenberg.org/cache/epub/100/pg100-h.zip"
+
+    payload = b"Hello from R2 and Python Workers!"
+    response = requests.put(
+        f"{base}/objects/hello.txt",
+        data=payload,
+        headers={
+            "content-type": "text/plain",
+            "cache-control": "public, max-age=60",
+            "x-object-category": "test",
+        },
+    )
+    assert response.status_code == 201
+    stored = response.json()["stored"]
+    assert stored["key"] == "hello.txt"
+    assert stored["size"] == len(payload)
+    assert stored["customMetadata"]["category"] == "test"
+
+    response = requests.get(f"{base}/objects/hello.txt")
+    assert response.status_code == 200
+    assert response.content == payload
+    assert response.headers["content-type"] == "text/plain"
+    assert response.headers["etag"]
+
+    response = requests.get(f"{base}/objects/hello.txt", headers={"range": "bytes=0-4"})
+    assert response.status_code == 206
+    assert response.content == b"Hello"
+    assert response.headers["content-range"] == f"bytes 0-4/{len(payload)}"
+
+    response = requests.head(f"{base}/objects/hello.txt")
+    assert response.status_code == 200
+    assert response.headers["content-length"] == str(len(payload))
+
+    response = requests.get(f"{base}/objects?prefix=hello&include=customMetadata")
+    assert response.status_code == 200
+    assert [obj["key"] for obj in response.json()["objects"]] == ["hello.txt"]
+
+    response = requests.get(f"{base}/objects?delimiter=/")
+    assert response.status_code == 200
+    assert "delimitedPrefixes" in response.json()
+
+    # Multipart routes use ?key= so realistic R2 keys with slashes work.
+    multipart_key = "multipart/slash-key.txt"
+    response = requests.post(f"{base}/multipart", params={"key": multipart_key})
+    assert response.status_code == 201
+    upload_id = response.json()["uploadId"]
+
+    response = requests.put(
+        f"{base}/multipart/{upload_id}/1",
+        params={"key": multipart_key},
+        data=b"multipart body",
+    )
+    assert response.status_code == 200
+    part = response.json()["part"]
+
+    response = requests.post(
+        f"{base}/multipart/{upload_id}/complete",
+        params={"key": multipart_key},
+        json={"parts": [part]},
+    )
+    assert response.status_code == 200
+    assert response.json()["completed"]["key"] == multipart_key
+
+    response = requests.get(f"{base}/objects/{multipart_key}")
+    assert response.status_code == 200
+    assert response.content == b"multipart body"
+
+    response = requests.delete(
+        f"{base}/objects",
+        json={"keys": ["hello.txt", multipart_key]},
+    )
+    assert response.status_code == 200
+    assert sorted(response.json()["deleted"]) == ["hello.txt", multipart_key]
+
+    response = requests.get(f"{base}/objects/hello.txt")
+    assert response.status_code == 404
+
+
 def test_16_sync_http_clients(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}/sync")
