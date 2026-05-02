@@ -26,15 +26,17 @@ class Default(WorkerEntrypoint):
         path = "/" + path.split("?", 1)[0] if path else "/"
 
         if path == "/":
-            return Response.json({
-                "example": "Synchronous HTTP clients in Python Workers",
-                "target": TARGET_URL,
-                "clients": ["requests", "urllib3", "httpx.Client"],
-                "endpoints": {
-                    "GET /sync": "Fetch using requests, urllib3, and httpx.Client",
-                    "GET /all": "Alias for /sync",
-                },
-            })
+            return Response.json(
+                {
+                    "example": "Synchronous HTTP clients in Python Workers",
+                    "target": TARGET_URL,
+                    "clients": ["requests", "urllib3", "httpx.Client"],
+                    "endpoints": {
+                        "GET /sync": "Fetch using requests, urllib3, and httpx.Client",
+                        "GET /all": "Alias for /sync",
+                    },
+                }
+            )
 
         if path in ("/sync", "/all"):
             return Response.json({"target": TARGET_URL, "results": self.fetch_sync()})

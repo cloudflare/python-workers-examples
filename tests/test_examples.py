@@ -128,7 +128,6 @@ def test_16_sync_http_clients(dev_server):
         assert result["saw_expected_text"] is True
 
 
-
 def test_08_cron(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
