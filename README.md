@@ -30,6 +30,8 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`13-js-api-pygments/`**](13-js-api-pygments) — shows how to use [Pygments](https://pygments.org/) to highlight code with Python Workers.
 - [**`14-websocket-stream-consumer/`**](14-websocket-stream-consumer) — shows how to use [WebSocket](https://developers.cloudflare.com/workers/runtime-apis/websockets/) to consume a stream of data with Python Workers.
 - [**`15-chatroom/`**](15-chatroom) - A real-time chatroom using WebSocket.
+- [**`16-sync-http-clients/`**](16-sync-http-clients) — demonstrates outbound HTTP with synchronous Python clients (`requests`, `urllib3`, and `httpx.Client`).
+- [**`17-r2/`**](17-r2) — demonstrates core [Cloudflare R2](https://developers.cloudflare.com/r2/) object storage APIs from Python Workers.
 
 
 
