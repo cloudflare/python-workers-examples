@@ -43,7 +43,10 @@ def is_missing(value):
     """True for JS null or undefined values crossing into Python."""
     if value is None or value is jsnull:
         return True
-    return str(type(value)) == "<class 'pyodide.ffi.JsProxy'>" and str(value) == "undefined"
+    return (
+        str(type(value)) == "<class 'pyodide.ffi.JsProxy'>"
+        and str(value) == "undefined"
+    )
 
 
 def json_response(data, status=200):
@@ -197,11 +200,15 @@ def range_options_from_header(range_header):
     if not range_header:
         return None, None
     if not range_header.startswith("bytes="):
-        return None, json_response({"error": "only bytes ranges are supported"}, status=400)
+        return None, json_response(
+            {"error": "only bytes ranges are supported"}, status=400
+        )
 
     spec = range_header[len("bytes=") :].strip()
     if "," in spec or "-" not in spec:
-        return None, json_response({"error": "only a single byte range is supported"}, status=400)
+        return None, json_response(
+            {"error": "only a single byte range is supported"}, status=400
+        )
 
     start, end = spec.split("-", 1)
     try:
@@ -217,7 +224,9 @@ def range_options_from_header(range_header):
             return {"range": {"offset": offset}}, None
         end_number = int(end)
         if end_number < offset:
-            return None, json_response({"error": "range end must be >= start"}, status=400)
+            return None, json_response(
+                {"error": "range end must be >= start"}, status=400
+            )
         return {"range": {"offset": offset, "length": end_number - offset + 1}}, None
     except ValueError:
         return None, json_response({"error": "invalid range"}, status=400)
@@ -266,9 +275,13 @@ def object_response(obj, is_range=False):
             offset = int(obj_range.offset)
             length = int(obj_range.length)
             headers.set("content-length", str(length))
-            headers.set("content-range", f"bytes {offset}-{offset + length - 1}/{int(obj.size)}")
+            headers.set(
+                "content-range", f"bytes {offset}-{offset + length - 1}/{int(obj.size)}"
+            )
 
-    return JsResponse.new(obj.body, to_js_object({"status": status, "headers": headers}))
+    return JsResponse.new(
+        obj.body, to_js_object({"status": status, "headers": headers})
+    )
 
 
 def head_response(obj):
@@ -378,7 +391,9 @@ class Default(WorkerEntrypoint):
 
         if is_check:
             if method != "GET":
-                return json_response({"error": f"method {method} not allowed"}, status=405)
+                return json_response(
+                    {"error": f"method {method} not allowed"}, status=405
+                )
             return await self.check_large_file(name, info)
 
         if method not in ("GET", "HEAD"):
@@ -454,9 +469,13 @@ class Default(WorkerEntrypoint):
         data = body.to_py() if hasattr(body, "to_py") else body
         keys = data.get("keys") if isinstance(data, dict) else None
         if not isinstance(keys, list) or not keys:
-            return json_response({"error": "body must be JSON like {'keys': ['a', 'b']}"}, status=400)
+            return json_response(
+                {"error": "body must be JSON like {'keys': ['a', 'b']}"}, status=400
+            )
         if len(keys) > 1000:
-            return json_response({"error": "R2 delete() accepts at most 1000 keys"}, status=400)
+            return json_response(
+                {"error": "R2 delete() accepts at most 1000 keys"}, status=400
+            )
 
         await self.env.BUCKET.delete(to_js(keys))
         return json_response({"deleted": keys})
@@ -476,7 +495,9 @@ class Default(WorkerEntrypoint):
                 upload = await self.env.BUCKET.createMultipartUpload(key)
             else:
                 upload = await self.env.BUCKET.createMultipartUpload(key, options)
-            return json_response({"key": str(upload.key), "uploadId": str(upload.uploadId)}, status=201)
+            return json_response(
+                {"key": str(upload.key), "uploadId": str(upload.uploadId)}, status=201
+            )
 
         if not parts:
             return json_response({"error": "missing uploadId"}, status=400)
@@ -488,15 +509,21 @@ class Default(WorkerEntrypoint):
             try:
                 part_number = int(parts[1])
             except ValueError:
-                return json_response({"error": "partNumber must be an integer"}, status=400)
+                return json_response(
+                    {"error": "partNumber must be an integer"}, status=400
+                )
 
             options, error = object_options_from_request(request)
             if error:
                 return error
             if options is None:
-                uploaded_part = await upload.uploadPart(part_number, request.js_object.body)
+                uploaded_part = await upload.uploadPart(
+                    part_number, request.js_object.body
+                )
             else:
-                uploaded_part = await upload.uploadPart(part_number, request.js_object.body, options)
+                uploaded_part = await upload.uploadPart(
+                    part_number, request.js_object.body, options
+                )
             return json_response(
                 {
                     "key": key,
@@ -538,7 +565,9 @@ class Default(WorkerEntrypoint):
             except ValueError:
                 return json_response({"error": "limit must be an integer"}, status=400)
             if parsed_limit < 1 or parsed_limit > 1000:
-                return json_response({"error": "limit must be between 1 and 1000"}, status=400)
+                return json_response(
+                    {"error": "limit must be between 1 and 1000"}, status=400
+                )
             options["limit"] = parsed_limit
         if delimiter:
             options["delimiter"] = delimiter
@@ -558,14 +587,18 @@ class Default(WorkerEntrypoint):
             for i in range(int(listing.objects.length))
         ]
         delimited_prefixes = []
-        if hasattr(listing, "delimitedPrefixes") and not is_missing(listing.delimitedPrefixes):
+        if hasattr(listing, "delimitedPrefixes") and not is_missing(
+            listing.delimitedPrefixes
+        ):
             delimited_prefixes = list(listing.delimitedPrefixes.to_py())
 
         return json_response(
             {
                 "objects": objects,
                 "truncated": bool(listing.truncated),
-                "cursor": None if is_missing(getattr(listing, "cursor", None)) else str(listing.cursor),
+                "cursor": None
+                if is_missing(getattr(listing, "cursor", None))
+                else str(listing.cursor),
                 "delimitedPrefixes": delimited_prefixes,
             }
         )

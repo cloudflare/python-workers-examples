@@ -120,7 +120,10 @@ def test_17_r2(dev_server):
     assert root["example"] == "Cloudflare R2 from a Python Worker"
     assert root["large_files"]["hvsc"]["key"] == "vsc/84/raw/HVSC_84-all-of-them.7z"
     assert root["large_files"]["shakespeare"]["key"] == "pg100-h.zip"
-    assert root["large_files"]["shakespeare"]["source_url"] == "https://www.gutenberg.org/cache/epub/100/pg100-h.zip"
+    assert (
+        root["large_files"]["shakespeare"]["source_url"]
+        == "https://www.gutenberg.org/cache/epub/100/pg100-h.zip"
+    )
 
     payload = b"Hello from R2 and Python Workers!"
     response = requests.put(
@@ -214,7 +217,6 @@ def test_16_sync_http_clients(dev_server):
         assert result["status_code"] == 200
         assert result["ok"] is True
         assert result["saw_expected_text"] is True
-
 
 
 def test_08_cron(dev_server):
