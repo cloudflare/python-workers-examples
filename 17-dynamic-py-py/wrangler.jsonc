@@ -1,0 +1,17 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "dynamic-py-py",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-04-01",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"worker_loaders": [
+		{
+			"binding": "LOADER"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
