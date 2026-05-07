@@ -1,6 +1,6 @@
 from pyodide.ffi import create_proxy, to_js
 from js import Object
-from workers import Response, WorkerEntrypoint
+from workers import WorkerEntrypoint
 
 # The source code of the dynamically-loaded Python Worker. In a real
 # application this could be loaded from KV, R2, or any other storage.
