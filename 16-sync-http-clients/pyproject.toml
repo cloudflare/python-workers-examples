@@ -1,0 +1,18 @@
+[project]
+name = "python-sync-http-clients"
+version = "0.1.0"
+description = "Synchronous HTTP clients in Python Workers"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.0",
+    "requests>=2.32.0",
+    "urllib3>=2.5.0",
+    "workers-runtime-sdk>=1.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]
