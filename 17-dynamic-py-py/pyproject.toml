@@ -1,0 +1,15 @@
+[project]
+name = "dynamic-py-py"
+version = "0.1.0"
+description = "Python Worker that dynamically loads a Python Worker"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "webtypy>=0.1.7",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py>=1.9.0",
+    "workers-runtime-sdk"
+]
