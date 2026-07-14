@@ -1,7 +1,7 @@
 import templateHtml from './template.html';
 
 interface Env {
-	PYTHON_RPC: Service;
+	PYTHON_RPC: HighlighterRpcService;
 }
 
 // Type definition for the Python RPC service methods
@@ -12,7 +12,7 @@ interface HighlighterRpcService {
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		// Get the RPC stub from the Python worker
-		const rpc = env.PYTHON_RPC as any as HighlighterRpcService;
+		const rpc = env.PYTHON_RPC;
 
 		// Sample code to highlight
 		const sampleCode = `
