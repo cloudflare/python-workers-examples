@@ -6,7 +6,7 @@ interface Env {
 
 // Type definition for the Python RPC service methods
 interface HighlighterRpcService {
-	highlight_code(code: string, language?: string): Promise<Map<string, string>>;
+	highlight_code(code: string, language?: string): Promise<{ [key: string]: string }>;
 }
 
 export default {
@@ -38,9 +38,9 @@ console.log(\`Welcome, \${user.name}!\`);
 
 		// Build the HTML page from template
 		const html = templateHtml
-			.replace('{{CSS}}', result.get('css') || '')
-			.replace('{{LANGUAGE}}', result.get('language') || 'unknown')
-			.replace('{{HIGHLIGHTED_CODE}}', result.get('html') || '');
+			.replace('{{CSS}}', result['css'] || '')
+			.replace('{{LANGUAGE}}', result['language'] || 'unknown')
+			.replace('{{HIGHLIGHTED_CODE}}', result['html'] || '');
 
 		return new Response(html, {
 			headers: { 'Content-Type': 'text/html' },
