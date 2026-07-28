@@ -5,3 +5,9 @@ __pycache__
 CLAUDE.md
 **/uv.lock
 !/uv.lock
+
+pylock.toml
+.venv
+.venv-workers
+.pytest_cache
+.ruff_cache

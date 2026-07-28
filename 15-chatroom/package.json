@@ -1,5 +1,5 @@
 {
-	"name": "python-websocket-stream-consumer",
+	"name": "python-chatroom",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
@@ -8,6 +8,6 @@
 		"start": "uv run pywrangler dev"
 	},
 	"devDependencies": {
-		"wrangler": "^4.50.0"
+		"wrangler": "^4.114.0"
 	}
 }
