@@ -1,9 +1,10 @@
-from workers import WorkerEntrypoint, Response, DurableObject
-from pathlib import Path
-from js import WebSocketPair
 import json
+from datetime import UTC, datetime
+from pathlib import Path
 from urllib.parse import urlparse
-from datetime import datetime, timezone
+
+from js import WebSocketPair
+from workers import DurableObject, Response, WorkerEntrypoint
 
 
 class Chatroom(DurableObject):
@@ -95,7 +96,7 @@ class Chatroom(DurableObject):
 
     def get_timestamp(self):
         """Get current timestamp in ISO format."""
-        return datetime.now(timezone.utc).isoformat()
+        return datetime.now(UTC).isoformat()
 
 
 class Default(WorkerEntrypoint):

@@ -1,11 +1,11 @@
-from workers import WorkerEntrypoint, Response, Request
-from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
-from urllib.parse import urlparse, parse_qs
 import random
+from io import BytesIO
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
+from PIL import Image, ImageDraw, ImageFont
 from pyodide.ffi import to_js
+from workers import Request, Response, WorkerEntrypoint
 
 
 class Default(WorkerEntrypoint):
@@ -65,9 +65,9 @@ class Default(WorkerEntrypoint):
         color2 = params.get("color2", [None])[0]
 
         if not color1:
-            color1 = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+            color1 = f"#{random.randint(0, 0xFFFFFF):06x}"
         if not color2:
-            color2 = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+            color2 = f"#{random.randint(0, 0xFFFFFF):06x}"
 
         # Convert hex colors to RGB tuples
         r1, g1, b1 = self.hex_to_rgb(color1)

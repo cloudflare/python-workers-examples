@@ -1,6 +1,7 @@
-import requests
-import pytest
 import subprocess
+
+import pytest
+import requests
 from conftest import REPO_ROOT
 
 

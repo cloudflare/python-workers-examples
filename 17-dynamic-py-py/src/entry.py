@@ -1,5 +1,5 @@
-from pyodide.ffi import create_proxy, to_js
 from js import Object
+from pyodide.ffi import create_proxy, to_js
 from workers import WorkerEntrypoint
 
 # The source code of the dynamically-loaded Python Worker. In a real
