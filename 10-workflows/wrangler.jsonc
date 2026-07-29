@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "python-cron",
+	"name": "python-workflows",
 	"main": "src/entry.py",
 	"compatibility_date": "2025-11-02",
 	"compatibility_flags": [
