@@ -8,15 +8,18 @@ import tempfile
 import time
 from collections.abc import Iterator
 from pathlib import Path
+from types import ModuleType
+from typing import Any
 
 import pytest
 import requests
 
-from examples import EXAMPLES, Example, Lane, get
+from examples import BY_DIRECTORY, Example, Lane, get
 
 PYWRANGLER = ("uv", "run", "pywrangler")
 POLL_INTERVAL = 0.5
-REQUEST_TIMEOUT = 30
+READY_TIMEOUT = 30
+REQUEST_TIMEOUT = 60
 # Generous because the first boot of an example downloads its Pyodide packages.
 STARTUP_TIMEOUT = 180
 
@@ -25,6 +28,16 @@ def _free_port() -> int:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]
+
+
+class Worker:
+    def __init__(self, example: Example, base_url: str) -> None:
+        self.example = example
+        self.base_url = base_url
+
+    def get(self, path: str = "/", **kwargs: Any) -> requests.Response:
+        kwargs.setdefault("timeout", REQUEST_TIMEOUT)
+        return requests.get(f"{self.base_url}{path}", **kwargs)
 
 
 class DevServer:
@@ -88,7 +101,7 @@ class DevServer:
             # shared health route, and some answer `/` with 400 or 404 by design,
             # so only a refused connection counts as "not ready yet".
             try:
-                requests.get(self.base_url, timeout=REQUEST_TIMEOUT)
+                requests.get(self.base_url, timeout=READY_TIMEOUT)
                 return
             except (requests.ConnectionError, requests.Timeout):
                 time.sleep(POLL_INTERVAL)
@@ -137,17 +150,15 @@ def _dev_servers() -> Iterator[dict[str, DevServer]]:
 
 
 @pytest.fixture
-def dev_server(
+def worker(
     request: pytest.FixtureRequest, _dev_servers: dict[str, DevServer]
-) -> str:
-    """Base URL of a running `pywrangler dev` server for the requested example.
+) -> Worker:
+    """HTTP client for the example this test module declares in `EXAMPLE`.
 
-    Servers are booted once per session and reused, because a cold boot pays for
-    a `pywrangler sync` plus a Pyodide package download.
+    Dev servers are booted once per session and reused, because a cold boot pays
+    for a `pywrangler sync` plus a Pyodide package download.
     """
-    target: Example = (
-        get(request.param) if isinstance(request.param, str) else request.param
-    )
+    target = _target_for(request)
     _require_preconditions(target)
 
     if target.directory not in _dev_servers:
@@ -157,7 +168,31 @@ def dev_server(
         server = DevServer(target, state_dir)
         server.start()
         _dev_servers[target.directory] = server
-    return _dev_servers[target.directory].base_url
+    return Worker(target, _dev_servers[target.directory].base_url)
+
+
+def _target_for(request: pytest.FixtureRequest) -> Example:
+    requested = getattr(request, "param", None)
+    if isinstance(requested, Example):
+        return requested
+    if isinstance(requested, str):
+        return get(requested)
+    return _declared_example(request.module)
+
+
+def _declared_example(module: ModuleType) -> Example:
+    directory = getattr(module, "EXAMPLE", None)
+    if directory is None:
+        raise pytest.UsageError(
+            f"{module.__name__} uses the `worker` fixture but does not set "
+            f"`EXAMPLE` to the example directory it tests"
+        )
+    if directory not in BY_DIRECTORY:
+        raise pytest.UsageError(
+            f"{module.__name__} sets EXAMPLE = {directory!r}, which is not in the "
+            f"registry in tests/examples.py"
+        )
+    return BY_DIRECTORY[directory]
 
 
 def _require_preconditions(target: Example) -> None:
@@ -187,22 +222,6 @@ def _credentials_available() -> bool:
     )
 
 
-def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
-    """Fan a `dev_server` test out over every example, unless it named one."""
-    if "dev_server" not in metafunc.fixturenames:
-        return
-    if any(
-        marker.args and marker.args[0] == "dev_server"
-        for marker in metafunc.definition.iter_markers("parametrize")
-    ):
-        return
-    metafunc.parametrize(
-        "dev_server",
-        [pytest.param(e, id=e.test_id) for e in EXAMPLES],
-        indirect=True,
-    )
-
-
 def pytest_collection_modifyitems(
     config: pytest.Config, items: list[pytest.Item]
 ) -> None:
@@ -223,10 +242,9 @@ def pytest_collection_modifyitems(
 
 def _item_directory(item: pytest.Item) -> str | None:
     params = getattr(item, "callspec", None)
-    if params is None:
-        return None
-    target = params.params.get("dev_server")
-    if isinstance(target, Example):
-        return target.directory
-    directory = params.params.get("directory")
+    if params is not None:
+        target = params.params.get("worker")
+        if isinstance(target, Example):
+            return target.directory
+    directory = getattr(getattr(item, "module", None), "EXAMPLE", None)
     return directory if isinstance(directory, str) else None
