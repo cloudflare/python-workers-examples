@@ -1,0 +1,310 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --border: #e3e6ea;
+  --text: #16191d;
+  --muted: #6b7280;
+  --accent: #f6821f;
+  --accent-text: #ffffff;
+  --danger: #dc2626;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 4%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --surface: #1c1f24;
+    --border: #2c3138;
+    --text: #e8eaed;
+    --muted: #9aa1ab;
+    --shadow: none;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+.app {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.app__header {
+  margin-bottom: 1.5rem;
+}
+
+.app__header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.app__subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- composer ---------- */
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.875rem;
+}
+
+.composer__title,
+.composer__body,
+.search {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  resize: vertical;
+}
+
+.composer__title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.composer__title:focus,
+.composer__body:focus,
+.search:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.composer__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--muted);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.btn--ghost {
+  color: var(--muted);
+}
+
+.btn--icon {
+  padding: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.note:hover .btn--icon,
+.btn--icon:focus-visible {
+  opacity: 1;
+}
+
+.btn--icon:hover {
+  color: var(--danger);
+}
+
+/* ---------- toolbar ---------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.75rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.125rem;
+  padding: 0.125rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.filter {
+  padding: 0.3rem 0.7rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.filter.is-active {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.search {
+  flex: 1;
+  min-width: 0;
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+/* On narrow screens all three controls on one row squash the search box down
+   to a few characters, so give it a row of its own. Must come after the
+   `.search` rule above, whose `flex` shorthand would otherwise reset
+   `flex-basis`. */
+@media (max-width: 32rem) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .search {
+    order: 1;
+    flex-basis: 100%;
+  }
+}
+
+/* ---------- notes ---------- */
+
+.status {
+  min-height: 1.25rem;
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.status--error {
+  color: var(--danger);
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.75rem 0.875rem;
+}
+
+.note--busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.note__check {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.note__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.note__title,
+.note__body {
+  margin: 0;
+  padding: 0.1rem 0.25rem;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.note__title {
+  font-weight: 600;
+}
+
+.note__title:focus,
+.note__body:focus {
+  outline: 2px solid var(--accent);
+}
+
+.note__body {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.note__body:empty {
+  display: none;
+}
+
+.note__meta {
+  display: block;
+  padding-left: 0.25rem;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.note.is-done .note__title,
+.note.is-done .note__body {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.empty {
+  padding: 2.5rem 1rem;
+  color: var(--muted);
+  text-align: center;
+}

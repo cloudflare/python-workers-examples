@@ -1,0 +1,16 @@
+{
+	"name": "flask-worker",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "uv run pywrangler deploy",
+		"dev": "uv run pywrangler dev",
+		"start": "uv run pywrangler dev"
+	},
+	"devDependencies": {
+		"wrangler": "^4.114.0"
+	},
+	"dependencies": {
+		"workerd": "^1.20260505.1"
+	}
+}

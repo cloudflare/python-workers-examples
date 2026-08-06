@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "flask-notes-worker",
+  "main": "src/entry.py",
+  "compatibility_date": "2026-08-06",
+  "compatibility_flags": ["python_workers"],
+  "observability": {
+    "enabled": true
+  },
+  // The frontend is served straight from Cloudflare's edge. Requests that do
+  // not match a file in ./public (e.g. /api/*) fall through to the Worker.
+  "assets": {
+    "directory": "./public/"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "flask-notes",
+      // Replace with the id printed by `wrangler d1 create flask-notes`.
+      // Local development (`pywrangler dev`) works with the placeholder.
+      "database_id": "REPLACE_WITH_YOUR_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

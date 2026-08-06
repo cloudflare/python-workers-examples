@@ -1,0 +1,15 @@
+# Python environments
+.venv/
+.venv-workers/
+__pycache__/
+*.py[cod]
+
+# Vendored Pyodide wheels, re-created by `pywrangler dev`/`deploy`
+python_modules/
+
+# Local Wrangler/miniflare state, including the local D1 database
+.wrangler/
+
+node_modules/
+.dev.vars
+.env

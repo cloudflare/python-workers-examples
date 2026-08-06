@@ -1,0 +1,15 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "flask-worker",
+	"main": "src/worker.py",
+	"compatibility_date": "2026-06-01",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"vars": {
+		"MESSAGE": "My env var"
+	},
+	"observability": {
+		"enabled": true
+	}
+}
