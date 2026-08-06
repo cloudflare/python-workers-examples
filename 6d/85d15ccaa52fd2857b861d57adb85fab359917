@@ -1,0 +1,29 @@
+tests/test_01_hello.py
+  s_c8bc9c0d20848a::t_8af76ab6ceec2f 1-7
+tests/test_08_cron.py
+  s_8194db21c80eaa::t_acf49e47c9c421 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6d85d15ccaa52fd2857b861d57adb85fab359917",
+  "prompts": {},
+  "sessions": {
+    "s_8194db21c80eaa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_05ce3daacffeDK3ySQ9aU7GNRz",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Gyeongjae Choi <gyeongjae@cloudflare.com>"
+    },
+    "s_c8bc9c0d20848a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_02a990756ffeOa0mKDMPl72iY8",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Gyeongjae Choi <gyeongjae@cloudflare.com>"
+    }
+  }
+}
