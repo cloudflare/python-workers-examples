@@ -14,9 +14,18 @@ dev = [
     "ruff>=0.12.10",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = ["--strict-markers", "--strict-config", "-ra"]
+xfail_strict = true
+
 [tool.ruff]
 target-version = "py312"
 extend-exclude = ["**/python_modules", "**/.venv-workers"]
+# Mirrors `pythonpath` above, so ruff sorts `examples` as first-party instead of
+# guessing from whether it happens to be importable.
+src = [".", "tests"]
 
 [tool.ruff.lint]
 select = [
