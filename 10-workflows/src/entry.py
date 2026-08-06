@@ -1,7 +1,8 @@
-from workers import WorkerEntrypoint, Response, WorkflowEntrypoint
-from urllib.parse import urlparse
 import asyncio
 import random
+from urllib.parse import urlparse
+
+from workers import Response, WorkerEntrypoint, WorkflowEntrypoint
 
 
 class DAGWorkflow(WorkflowEntrypoint):

@@ -1,6 +1,6 @@
-from workers import WorkerEntrypoint, Response
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import OpenAI
+from workers import Response, WorkerEntrypoint
 
 
 class Default(WorkerEntrypoint):

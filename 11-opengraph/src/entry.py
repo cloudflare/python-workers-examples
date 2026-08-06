@@ -1,9 +1,9 @@
-from workers import WorkerEntrypoint, Request, fetch
-from js import HTMLRewriter
-from urllib.parse import urlparse
 from html import escape
+from urllib.parse import urlparse
 
+from js import HTMLRewriter
 from pyodide.ffi import create_proxy
+from workers import Request, WorkerEntrypoint, fetch
 
 
 class MetaTagInjector:

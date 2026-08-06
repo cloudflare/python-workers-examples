@@ -1,12 +1,12 @@
 import os
-import subprocess
-import time
 import socket
+import subprocess
 import sys
-import pytest
+import time
+from contextlib import contextmanager
 from pathlib import Path
 
-from contextlib import contextmanager
+import pytest
 
 REPO_ROOT = Path(__file__).parents[1]
 

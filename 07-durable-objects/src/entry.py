@@ -1,6 +1,7 @@
-from workers import WorkerEntrypoint, Response, DurableObject
-from pyodide.ffi import to_js
 from urllib.parse import urlparse
+
+from pyodide.ffi import to_js
+from workers import DurableObject, Response, WorkerEntrypoint
 
 
 class List(DurableObject):

@@ -1,8 +1,8 @@
-from workers import WorkerEntrypoint, Response, Request
 from pygments import highlight
-from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.util import ClassNotFound
+from workers import Request, Response, WorkerEntrypoint
 
 
 class Default(WorkerEntrypoint):
