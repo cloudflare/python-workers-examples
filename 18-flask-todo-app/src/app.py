@@ -1,9 +1,9 @@
 """Flask JSON API for the notes app, backed directly by D1."""
 
+from asyncio import get_event_loop
+
 from flask import Flask, g, jsonify, request
 from werkzeug.exceptions import HTTPException
-
-from d1 import D1, D1Error
 
 app = Flask(__name__)
 # Preserve our own key ordering in JSON responses rather than sorting them.
@@ -14,12 +14,25 @@ MAX_BODY_LEN = 10_000
 VALID_FILTERS = ("all", "active", "done")
 
 
-def get_db() -> D1:
+class D1Error(RuntimeError):
+    """A D1 query failed. Wraps the underlying error message."""
+
+
+def get_db():
     """Return the D1 wrapper for the current request."""
     if "db" not in g:
         # Cache on g for the lifetime of the request
-        g.db = D1(request.environ["workers.env"].DB)
+        g.db = request.environ["workers.env"].DB
     return g.db
+
+
+def run_db(task):
+    try:
+        return get_event_loop().run_until_complete(task)
+    except Exception as exc:
+        # D1 surfaces SQL errors as JS exceptions; re-raise as a Python error so
+        # we can register a custom error handler.
+        raise D1Error(f"{exc}") from exc
 
 
 # --------------------------------------------------------------------------
@@ -117,13 +130,15 @@ def list_notes():
 
     sql = sql.format(where=where)
 
-    rows = get_db().query(sql, params)
-    return jsonify({"notes": [serialize(r) for r in rows]})
+    rows = run_db(get_db().prepare(sql).bind(*params).all())["results"]
+    return jsonify({"notes": [serialize(dict(r)) for r in rows]})
 
 
 @app.get("/api/notes/<int:note_id>")
 def get_note(note_id: int):
-    row = get_db().first("SELECT * FROM notes WHERE id = ?", (note_id,))
+    row = run_db(
+        get_db().prepare("SELECT * FROM notes WHERE id = ?").bind(note_id).first()
+    )
     if row is None:
         return jsonify({"error": "Note not found."}), 404
     return jsonify(serialize(row))
@@ -138,9 +153,13 @@ def create_note():
     body = _clean_body(data.get("body", ""))
 
     # RETURNING to insert and read the stored row in a single round trip.
-    row = get_db().first(
-        "INSERT INTO notes (title, body) VALUES (?, ?) RETURNING *",
-        (title, body),
+    row = run_db(
+        get_db()
+        .prepare(
+            "INSERT INTO notes (title, body) VALUES (?, ?) RETURNING *",
+        )
+        .bind(title, body)
+        .first()
     )
     return jsonify(serialize(row)), 201
 
@@ -169,9 +188,11 @@ def update_note(note_id: int):
     # The f-string interpolates the updates fragments, every one of which is a
     # hardcoded literal from the branches above so this expands to one of seven
     # fixed statements. Values are not interpolated.
-    row = get_db().first(
-        f"UPDATE notes SET {', '.join(updates)} WHERE id = ? RETURNING *",
-        params,
+    row = run_db(
+        get_db()
+        .prepare(f"UPDATE notes SET {', '.join(updates)} WHERE id = ? RETURNING *")
+        .bind(*params)
+        .first()
     )
     if row is None:
         return jsonify({"error": "Note not found."}), 404
@@ -180,7 +201,9 @@ def update_note(note_id: int):
 
 @app.delete("/api/notes/<int:note_id>")
 def delete_note(note_id: int):
-    meta = get_db().run("DELETE FROM notes WHERE id = ?", (note_id,))
+    meta = run_db(
+        get_db().prepare("DELETE FROM notes WHERE id = ?").bind(note_id).run()
+    )["meta"]
     if not meta.get("changes"):
         return jsonify({"error": "Note not found."}), 404
     return "", 204
@@ -189,14 +212,14 @@ def delete_note(note_id: int):
 @app.delete("/api/notes/delete_completed")
 def delete_completed():
     """Bulk-delete every completed note."""
-    meta = get_db().run("DELETE FROM notes WHERE done = 1")
+    meta = run_db(get_db().prepare("DELETE FROM notes WHERE done = 1").run())["meta"]
     return jsonify({"deleted": meta.get("changes", 0)})
 
 
 @app.get("/api/health")
 def health():
     """Confirms the Worker is up and the D1 binding actually responds."""
-    get_db().first("SELECT 1 AS ok")
+    run_db(get_db().prepare("SELECT 1 AS ok").first())
     return jsonify({"status": "ok"})
 
 
