@@ -73,7 +73,7 @@ def test_04_query_d1(init_db, dev_server):
     ]
 
 
-@pytest.mark.xfail(reason="Not working")
+@pytest.mark.xfail(reason="Requires remote bindings")
 def test_05_langchain(dev_server):
     pass
 

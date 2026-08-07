@@ -5,12 +5,13 @@ description = "Python langchain example"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "langchain_core",
-    "langchain_openai"
+    "langchain-cloudflare",
+    "langchain-core",
+    "workers-runtime-sdk>=1.6.8",
 ]
 
 [dependency-groups]
 dev = [
     "workers-py",
-    "workers-runtime-sdk"
+    "workers-runtime-sdk",
 ]

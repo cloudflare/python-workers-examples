@@ -2,17 +2,14 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "hello-langchain",
 	"main": "src/worker.py",
-	"compatibility_date": "2025-11-02",
+	"compatibility_date": "2026-07-29",
 	"compatibility_flags": [
 		"python_workers"
 	],
-	"rules": [
-		{
-			"type": "Data",
-			"globs": ["python_modules/**/*.js"],
-			"fallthrough": true
-		}
-	],
+	"ai": {
+		"binding": "AI",
+		"remote": true
+	},
 	"observability": {
 		"enabled": true
 	}
