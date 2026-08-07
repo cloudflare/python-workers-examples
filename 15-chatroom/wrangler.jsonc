@@ -13,8 +13,7 @@
 		"bindings": [
 			{
 				"name": "CHATROOM",
-				"class_name": "Chatroom",
-				"script_name": "python-chatroom"
+				"class_name": "Chatroom"
 			}
 		]
 	},

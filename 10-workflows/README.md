@@ -1,5 +1,7 @@
 # Workflows Example
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/10-workflows)
+
 ## How to Run
 
 First ensure that `uv` is installed:

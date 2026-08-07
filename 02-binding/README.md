@@ -1,5 +1,7 @@
 # Environment Binding Example
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/02-binding)
+
 Warning: Python support in Workers is experimental and things will break. This
 example is meant for reference only right now; you should be prepared to update
 your code between now and official release time as APIs may change.

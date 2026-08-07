@@ -1,5 +1,7 @@
 # 17-dynamic-py-py — Python Worker loads a Python Dynamic Worker
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/17-dynamic-py-py)
+
 This example shows how a Python Worker can use the [Worker Loader](https://developers.cloudflare.com/dynamic-workers/) binding to dynamically load and execute another Python Worker at runtime.
 
 The parent Python Worker keeps the source of the dynamic Worker as a string (for demonstration purposes — in a real application you would load it from KV, R2, or any other storage). Each request is forwarded to the dynamically-loaded Worker, which runs in its own isolated sandbox.

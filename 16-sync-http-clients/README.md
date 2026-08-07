@@ -1,5 +1,7 @@
 # Sync HTTP Clients Example
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/16-sync-http-clients)
+
 This example demonstrates outbound HTTP from a Python Worker using synchronous Python HTTP clients known to work in the current runtime:
 
 - [`requests`](https://pypi.org/project/requests/)

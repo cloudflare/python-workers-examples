@@ -1,5 +1,7 @@
 # OpenGraph Meta Tag Injection Example
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/11-opengraph)
+
 This example demonstrates how to build a Python Worker that dynamically injects OpenGraph meta tags into web pages based on the request path. This is perfect for controlling how your content appears when shared on social media platforms like Facebook, Twitter, LinkedIn, and Slack.
 
 ## What It Does

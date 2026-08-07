@@ -13,8 +13,7 @@
 		"bindings": [
 			{
 				"name": "BLUESKY_FIREHOSE",
-				"class_name": "BlueskyFirehoseConsumer",
-				"script_name": "python-websocket-stream-consumer"
+				"class_name": "BlueskyFirehoseConsumer"
 			}
 		]
 	},

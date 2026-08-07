@@ -3,7 +3,8 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"deploy": "uv run pywrangler deploy",
+		"db:init": "uv run pywrangler d1 execute DB --remote --file db_init.sql",
+		"deploy": "npm run db:init && uv run pywrangler deploy",
 		"dev": "uv run pywrangler dev",
 		"start": "uv run pywrangler dev"
 	},

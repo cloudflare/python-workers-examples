@@ -1,5 +1,7 @@
 # WebSocket Stream Consumer - Bluesky Firehose
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/14-websocket-stream-consumer)
+
 This example demonstrates a long-running Durable Object that connects to the Bluesky firehose (via Jetstream) and filters for post events, with rate limiting to print at most 1 per second.
 
 ## How to Run
