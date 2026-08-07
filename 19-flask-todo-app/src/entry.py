@@ -1,6 +1,5 @@
-from workers import WorkerEntrypoint, wsgi
-
 from app import app
+from workers import WorkerEntrypoint, wsgi
 
 
 class Default(WorkerEntrypoint):
