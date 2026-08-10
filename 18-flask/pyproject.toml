@@ -1,0 +1,14 @@
+[project]
+name = "flask-worker"
+version = "0.1.0"
+description = "Python flask example"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+]

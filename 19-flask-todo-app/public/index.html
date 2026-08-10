@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notes</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>📝</text></svg>"
+    />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>Notes</h1>
+        <p class="app__subtitle">Flask on a Python Worker, backed by D1.</p>
+      </header>
+
+      <form id="create-form" class="card composer" autocomplete="off">
+        <input
+          id="title"
+          name="title"
+          class="composer__title"
+          type="text"
+          placeholder="What needs doing?"
+          maxlength="200"
+          required
+          aria-label="Note title"
+        />
+        <textarea
+          id="body"
+          name="body"
+          class="composer__body"
+          placeholder="Details (optional)"
+          maxlength="10000"
+          rows="2"
+          aria-label="Note details"
+        ></textarea>
+        <div class="composer__actions">
+          <button type="submit" class="btn btn--primary">Add note</button>
+        </div>
+      </form>
+
+      <div class="toolbar">
+        <div class="filters" role="tablist" aria-label="Filter notes">
+          <button class="filter is-active" data-filter="all" role="tab">All</button>
+          <button class="filter" data-filter="active" role="tab">Active</button>
+          <button class="filter" data-filter="done" role="tab">Done</button>
+        </div>
+        <input
+          id="search"
+          class="search"
+          type="search"
+          placeholder="Search…"
+          aria-label="Search notes"
+        />
+        <button id="clear-done" class="btn btn--ghost" hidden>Clear done</button>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <ul id="notes" class="notes"></ul>
+    </main>
+
+    <template id="note-template">
+      <li class="card note">
+        <input class="note__check" type="checkbox" aria-label="Toggle done" />
+        <div class="note__main">
+          <p class="note__title" tabindex="0" role="textbox"></p>
+          <p class="note__body" tabindex="0" role="textbox"></p>
+          <time class="note__meta"></time>
+        </div>
+        <button class="note__delete btn btn--icon" aria-label="Delete note">×</button>
+      </li>
+    </template>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
