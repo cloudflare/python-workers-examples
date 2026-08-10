@@ -1,5 +1,7 @@
 # Image Generation with Pillow Example
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/12-image-gen)
+
 This example demonstrates how to build a Python Worker that dynamically generates images using the Pillow (PIL) library.
 
 ## What It Does

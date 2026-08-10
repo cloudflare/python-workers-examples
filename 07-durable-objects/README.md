@@ -1,5 +1,7 @@
 # Durable Objects Example
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/07-durable-objects)
+
 ## How to Run
 
 First ensure that `uv` is installed:
