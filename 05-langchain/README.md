@@ -1,10 +1,6 @@
 # LangChain Example
 
-** Currently this example is broken. **
-
-Warning: Python support in Workers is experimental and things will break. This
-example is meant for reference only right now; you should be prepared to update
-your code between now and official release time as APIs may change.
+This example shows how to use LangChain with Cloudflare Workers AI binding.
 
 ## How to Run
 
@@ -15,3 +11,10 @@ Now, if you run `uv run pywrangler dev` within this directory, it should use the
 in `wrangler.jsonc` to run the example.
 
 You can also run `uv run pywrangler deploy` to deploy the example.
+
+Because this example uses a remote Workers AI binding, local development requires
+`npx wrangler login`.
+
+## Notes
+
+- If you want the lower-level direct binding example, see [`09-workers-ai/`](../09-workers-ai).
