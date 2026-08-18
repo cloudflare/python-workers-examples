@@ -1,0 +1,16 @@
+[project]
+name = "django-todo-d1-worker"
+version = "0.1.0"
+description = "Django TODO example backed by D1 via django-cf"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django",
+    "django-cf>=0.2.14",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk",
+]

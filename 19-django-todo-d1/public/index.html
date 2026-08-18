@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Django TODO + D1</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header class="hero">
+        <h1>Django TODO + D1</h1>
+        <p>
+          A minimal same-origin frontend backed by Django, django-cf, and
+          Cloudflare D1.
+        </p>
+      </header>
+
+      <section class="panel" aria-labelledby="create-heading">
+        <h2 id="create-heading" class="sr-only">Create a TODO</h2>
+        <form id="todo-form" class="create-form">
+          <label for="title" class="sr-only">Title</label>
+          <div class="input-group">
+            <input
+              id="title"
+              name="title"
+              type="text"
+              maxlength="200"
+              placeholder="What needs to be done?"
+              required
+            />
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              Add TODO
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="list-heading">
+        <div class="section-header">
+          <h2 id="list-heading">Tasks</h2>
+          <button id="refresh" type="button" class="btn btn-secondary btn-sm">
+            Refresh
+          </button>
+        </div>
+        <div
+          id="status"
+          role="status"
+          aria-live="polite"
+          class="status-message"
+        ></div>
+        <ul id="todo-list" class="todo-list"></ul>
+      </section>
+    </main>
+
+    <template id="todo-template">
+      <li class="todo-item">
+        <label class="todo-toggle">
+          <input class="todo-completed" type="checkbox" />
+          <span class="sr-only">Mark as completed</span>
+        </label>
+        <div class="todo-body">
+          <div class="todo-row">
+            <span class="todo-title"></span>
+            <div class="todo-actions">
+              <button
+                class="btn btn-secondary btn-sm rename-button"
+                type="button"
+              >
+                Rename
+              </button>
+              <button class="btn btn-danger btn-sm delete-button" type="button">
+                Delete
+              </button>
+            </div>
+          </div>
+          <form class="todo-rename-form" hidden>
+            <input
+              type="text"
+              class="todo-rename-input input-sm"
+              required
+              maxlength="200"
+              autocomplete="off"
+              aria-label="Rename TODO"
+            />
+            <div class="todo-actions todo-rename-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Save</button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm cancel-rename"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+          <div class="todo-meta"></div>
+        </div>
+      </li>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
