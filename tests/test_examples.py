@@ -1,4 +1,5 @@
 import subprocess
+from datetime import UTC, datetime
 
 import pytest
 import requests
@@ -170,3 +171,114 @@ def test_10_workflows(dev_server):
     # Check that response is JSON
     status = response.json()
     assert isinstance(status, dict)
+
+
+def test_18_django(dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}")
+    assert response.status_code == 200
+    assert response.text == '{"message": "Hello from Django on Cloudflare Workers!"}'
+    assert response.headers["content-type"] == "application/json"
+
+
+@pytest.fixture
+def init_19_django_todo_d1_db():
+    subprocess.run(
+        [
+            "uv",
+            "run",
+            "pywrangler",
+            "d1",
+            "migrations",
+            "apply",
+            "django-todo-d1",
+            "--local",
+        ],
+        cwd=REPO_ROOT / "19-django-todo-d1",
+        check=True,
+    )
+
+
+def test_19_django_todo_d1(init_19_django_todo_d1_db, dev_server):
+    port = dev_server
+    response = requests.get(f"http://localhost:{port}/api/health/")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+    assert response.headers["content-type"] == "application/json"
+
+    index_response = requests.get(f"http://localhost:{port}/")
+    assert index_response.status_code == 200
+    assert index_response.headers["content-type"].startswith("text/html")
+    assert "Django TODO + D1" in index_response.text
+
+    script_response = requests.get(f"http://localhost:{port}/app.js")
+    assert script_response.status_code == 200
+    assert "javascript" in script_response.headers["content-type"]
+
+    style_response = requests.get(f"http://localhost:{port}/style.css")
+    assert style_response.status_code == 200
+    assert "text/css" in style_response.headers["content-type"]
+
+    create_response = requests.post(
+        f"http://localhost:{port}/api/todos/",
+        json={"title": "Write Django TODO example"},
+    )
+    assert create_response.status_code == 201
+    created_todo = create_response.json()["todo"]
+    assert created_todo["title"] == "Write Django TODO example"
+    assert created_todo["completed"] is False
+    assert isinstance(created_todo["id"], int)
+    assert created_todo["created_at"].endswith("+00:00")
+    created_at = datetime.fromisoformat(created_todo["created_at"])
+    assert created_at.tzinfo is not None
+    assert created_at.astimezone(UTC).tzinfo == UTC
+
+    list_response = requests.get(f"http://localhost:{port}/api/todos/")
+    assert list_response.status_code == 200
+    todos = list_response.json()["todos"]
+    assert created_todo["id"] in {todo["id"] for todo in todos}
+
+    detail_response = requests.get(
+        f"http://localhost:{port}/api/todos/{created_todo['id']}/"
+    )
+    assert detail_response.status_code == 200
+    assert detail_response.json()["todo"]["title"] == "Write Django TODO example"
+
+    blank_title_response = requests.post(
+        f"http://localhost:{port}/api/todos/",
+        json={"title": "   "},
+    )
+    assert blank_title_response.status_code == 400
+    assert blank_title_response.json() == {
+        "error": "The 'title' field cannot be blank."
+    }
+
+    wrong_completed_response = requests.patch(
+        f"http://localhost:{port}/api/todos/{created_todo['id']}/",
+        json={"completed": "yes"},
+    )
+    assert wrong_completed_response.status_code == 400
+    assert wrong_completed_response.json() == {
+        "error": "The 'completed' field must be a boolean."
+    }
+
+    patch_response = requests.patch(
+        f"http://localhost:{port}/api/todos/{created_todo['id']}/",
+        json={"title": "Ship Django TODO example", "completed": True},
+    )
+    assert patch_response.status_code == 200
+    patched_todo = patch_response.json()["todo"]
+    assert patched_todo["title"] == "Ship Django TODO example"
+    assert patched_todo["completed"] is True
+
+    delete_response = requests.delete(
+        f"http://localhost:{port}/api/todos/{created_todo['id']}/"
+    )
+    assert delete_response.status_code == 204
+    assert delete_response.text == ""
+
+    missing_response = requests.get(
+        f"http://localhost:{port}/api/todos/{created_todo['id']}/"
+    )
+    assert missing_response.status_code == 404
+    assert missing_response.json() == {"error": "TODO not found."}

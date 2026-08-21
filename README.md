@@ -32,6 +32,8 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`15-chatroom/`**](15-chatroom) - A real-time chatroom using WebSocket.
 - [**`16-sync-http-clients/`**](16-sync-http-clients) — demonstrates outbound HTTP with synchronous Python clients (`requests`, `urllib3`, and `httpx.Client`).
 - [**`17-dynamic-py-py/`**](17-dynamic-py-py) — shows how to load and run a Python Worker dynamically at runtime using a [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/) binding.
+- [**`18-django/`**](18-django) — runs a naive Django WSGI application directly on Python Workers.
+- [**`19-django-todo-d1/`**](19-django-todo-d1) — uses Django with D1 for a basic TODO application.
 
 
 
