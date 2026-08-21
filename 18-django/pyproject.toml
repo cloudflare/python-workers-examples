@@ -1,7 +1,7 @@
 [project]
 name = "django-worker"
 version = "0.1.0"
-description = "Naive Django example for Python Workers"
+description = "Simple Django example for Python Workers"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
