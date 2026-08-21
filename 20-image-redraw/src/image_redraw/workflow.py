@@ -119,20 +119,19 @@ class RedrawWorkflow(WorkflowEntrypoint):
 
             serialized = Response(form)
             multipart_type = serialized.headers["content-type"]
-            multipart_body = await serialized.bytes()
 
             try:
                 generated = await self.env.AI.run(
                     MODEL,
                     {
                         "multipart": {
-                            "body": multipart_body,
+                            "body": serialized.body,
                             "contentType": multipart_type,
                         }
                     },
                 )
             except Exception as exc:
-                if hasattr(exc, "message") and ai_error_code(exc.message) != AI_SAFETY_ERROR_CODE:
+                if ai_error_code(getattr(exc, "message", None)) != AI_SAFETY_ERROR_CODE:
                     raise
                 # Returning rather than raising checkpoints the step, which is
                 # what guarantees no further inference happens.
