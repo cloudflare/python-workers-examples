@@ -1,0 +1,19 @@
+fastapi-todo/src/worker.py
+  s_745c05ceaa09e2::t_0a49f1b3f700f1 1-136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4c0619a815f8ab55dd8fb53f9c112bf3fad8f1aa",
+  "prompts": {},
+  "sessions": {
+    "s_745c05ceaa09e2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe084dafcffeYsUNLZ8s8b7qs5",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Dominik Picheta <dominik@cloudflare.com>"
+    }
+  }
+}
