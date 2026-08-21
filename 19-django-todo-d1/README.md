@@ -23,6 +23,17 @@ uv run pywrangler dev
 
 Then open http://localhost:8787/ in your browser.
 
+## How to deploy
+
+Replace the `database_id` in `wrangler.jsonc` with your actual D1 database UUID.
+
+Then run
+
+```sh
+uv run pywrangler deploy
+```
+
+
 ## Endpoints
 
 | Endpoint | Description |
