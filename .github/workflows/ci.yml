@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         uv sync --dev
-        cd 01-hello && uv run pywrangler dev --help
+        cd hello && uv run pywrangler dev --help
 
     - name: Run tests
       run: uv run pytest -vv
