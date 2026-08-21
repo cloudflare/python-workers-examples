@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Image Redraw - Python Workers + Workers AI</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="desktop">
+      <header class="page-header">
+        <h1>Image Redraw</h1>
+        <p>
+          Upload a photo. A Python Worker and Workers AI redraws it
+          with clunky confidence.
+        </p>
+      </header>
+
+      <div class="columns">
+        <section class="window" aria-labelledby="upload-heading">
+          <div class="titlebar">
+            <h2 id="upload-heading">untitled - Paint</h2>
+            <span class="titlebar-buttons" aria-hidden="true">_ □ x</span>
+          </div>
+          <div class="window-body">
+            <form id="upload-form">
+              <label class="field-label" for="file-input">Pick a picture</label>
+              <input id="file-input" type="file" aria-describedby="file-help"
+                accept="image/png,image/jpeg,image/webp" />
+              <p class="hint" id="file-help">
+                PNG, JPEG or WebP.
+              </p>
+              <button type="submit" class="btn btn-go" id="submit-button">
+                Redraw it!
+              </button>
+            </form>
+
+            <p id="upload-status" class="status" role="status" aria-live="polite"></p>
+
+            <figure id="preview" hidden>
+              <img id="preview-image" alt="" />
+              <figcaption id="preview-caption"></figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="window" aria-labelledby="compare-heading">
+          <div class="titlebar">
+            <h2 id="compare-heading">before-and-after.bmp</h2>
+            <span class="titlebar-buttons" aria-hidden="true">_ □ x</span>
+          </div>
+          <div class="window-body">
+            <p class="empty" id="compare-empty">
+              Nothing open yet. Redraw a picture, or pick one from My Pictures.
+            </p>
+            <div class="compare" id="compare" hidden>
+              <figure>
+                <img id="original-image" alt="" />
+                <figcaption>Original</figcaption>
+              </figure>
+              <figure>
+                <img id="output-image" alt="" />
+                <figcaption>Redrawn</figcaption>
+              </figure>
+            </div>
+            <p class="meta" id="compare-meta"></p>
+          </div>
+        </section>
+      </div>
+
+      <section class="window" aria-labelledby="gallery-heading">
+        <div class="titlebar">
+          <h2 id="gallery-heading">My Pictures</h2>
+          <span class="titlebar-buttons" aria-hidden="true">_ □ x</span>
+        </div>
+        <div class="window-body">
+          <div class="gallery-header">
+            <p class="hint">Finished redraws, newest first.</p>
+            <button type="button" class="btn" id="refresh-button">
+              Refresh
+            </button>
+          </div>
+          <p id="gallery-status" class="status" role="status" aria-live="polite"></p>
+          <ul id="gallery"></ul>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

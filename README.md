@@ -34,6 +34,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`17-dynamic-py-py/`**](17-dynamic-py-py) — shows how to load and run a Python Worker dynamically at runtime using a [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/) binding.
 - [**`18-django/`**](18-django) — runs a naive Django WSGI application directly on Python Workers.
 - [**`19-django-todo-d1/`**](19-django-todo-d1) — uses Django with D1 for a basic TODO application.
+- [**`20-image-redraw/`**](20-image-redraw) — an example that combines [FastAPI](https://fastapi.tiangolo.com/), [R2](https://developers.cloudflare.com/r2/), [Queues](https://developers.cloudflare.com/queues/), [Workflows](https://developers.cloudflare.com/workflows/) and [Workers AI](https://developers.cloudflare.com/workers-ai/) to redraw uploaded images.
 
 
 
