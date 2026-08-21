@@ -1,0 +1,52 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "image-redraw-worker",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-08-21",
+	"compatibility_flags": [
+		"python_workers",
+		"python_workflows_implicit_dependencies"
+	],
+	"assets": {
+		"directory": "./public",
+		"run_worker_first": [
+			"/api/*"
+		]
+	},
+	"r2_buckets": [
+		{
+			"binding": "REDRAW_BUCKET",
+			"bucket_name": "image-redraw"
+		}
+	],
+	"queues": {
+		"producers": [
+			{
+				"binding": "REDRAW_QUEUE",
+				"queue": "image-redraw-jobs"
+			}
+		],
+		"consumers": [
+			{
+				"queue": "image-redraw-jobs",
+				"max_batch_size": 10,
+				"max_batch_timeout": 2,
+				"max_retries": 3
+			}
+		]
+	},
+	"workflows": [
+		{
+			"name": "image-redraw",
+			"binding": "REDRAW_WORKFLOW",
+			"class_name": "RedrawWorkflow"
+		}
+	],
+	"ai": {
+		"binding": "AI",
+		"remote": true
+	},
+	"observability": {
+		"enabled": true
+	}
+}
