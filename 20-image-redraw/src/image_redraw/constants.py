@@ -28,8 +28,9 @@ FAILURE_PREFIX = "failures/"
 ALLOWED_CONTENT_TYPES = {"image/png", "image/jpeg", "image/webp"}
 MAX_UPLOAD_BYTES = 5_000_000
 
-# FLUX reference images have to stay under 512x512, so the Workflow letterboxes
-# every picture onto a white square just below that before inference.
+# A deliberately small, fixed canvas for this example: it keeps inference cheap
+# and every reference picture uniform. It is a choice made here, not a limit
+# documented by the model.
 TARGET_SIZE = (511, 511)
 CANVAS_COLOR = (255, 255, 255)
 JPEG_QUALITY = 82
@@ -47,12 +48,12 @@ STATUS_MAP = {
     "errored": "failed",
     "terminated": "failed",
 }
-# Shown to the browser in place of the Workflow error, which may quote the
-# model's own description of why the picture was refused.
 SAFETY_REJECTED_REASON = (
     "Workers AI refused to redraw that picture. Try a different one."
 )
 INVALID_IMAGE_REASON = "That upload could not be decoded as a usable image."
+MISSING_ORIGINAL_REASON = "The uploaded picture is no longer available."
+INVALID_OUTPUT_REASON = "Workers AI returned something that was not a picture."
 
 
 def is_job_id(value: object) -> bool:

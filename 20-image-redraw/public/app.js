@@ -1,6 +1,5 @@
-const CANVAS_SIZE = 511;
-const MAX_BYTES = 700_000;
-const JPEG_QUALITY = 0.82;
+const REFERENCE_SIZE = 511;
+const MAX_UPLOAD_BYTES = 5_000_000;
 const POLL_INTERVAL_MS = 2000;
 const MAX_POLLS = 150;
 const MAX_POLL_FAILURES = 3;
@@ -91,7 +90,7 @@ async function inspectFile(file) {
   if (!ACCEPTED_TYPES.includes(file.type)) {
     throw new Error("Only PNG, JPEG and WebP are supported.");
   }
-  if (file.size > MAX_BYTES) {
+  if (file.size > MAX_UPLOAD_BYTES) {
     throw new Error(
       `That file is ${file.size.toLocaleString()} bytes, over the ${MAX_UPLOAD_BYTES.toLocaleString()} byte limit. Try a smaller picture.`,
     );

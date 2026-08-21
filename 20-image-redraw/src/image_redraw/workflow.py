@@ -1,5 +1,6 @@
 import base64
 import io
+import json
 
 from PIL import Image, ImageOps
 from workers import Blob, FormData, Response, WorkflowEntrypoint
@@ -11,8 +12,10 @@ from .constants import (
     AI_SAFETY_ERROR_CODE,
     CANVAS_COLOR,
     INVALID_IMAGE_REASON,
+    INVALID_OUTPUT_REASON,
     JPEG_QUALITY,
     MAX_SOURCE_PIXELS,
+    MISSING_ORIGINAL_REASON,
     MODEL,
     SAFETY_REJECTED_REASON,
     TARGET_SIZE,
@@ -66,6 +69,7 @@ def resize(image_bytes: bytes) -> bytes:
 
 def _encode_centered_jpeg(image: Image.Image) -> bytes:
     if image.mode in ("RGBA", "LA") or "transparency" in image.info:
+        # Dropping alpha without a mask would render transparency as black.
         image = image.convert("RGBA")
         mask = image.getchannel("A")
     else:
@@ -99,14 +103,14 @@ class RedrawWorkflow(WorkflowEntrypoint):
         async def redraw(verify_original):
             source = await bucket.get(verify_original)
             if source is None:
-                raise NonRetryableError(f"No original stored for job {job_id}.")
+                return json.dumps({"ok": False, "reason": MISSING_ORIGINAL_REASON})
             original = await source.blob()
 
             try:
                 reference = resize(await original.bytes())
             except UnusableImageError as exc:
                 print(f"Job {job_id} has an unusable original: {exc}")
-                return {"ok": False, "reason": INVALID_IMAGE_REASON}
+                return json.dumps({"ok": False, "reason": INVALID_IMAGE_REASON})
 
             form = FormData()
             for field, value in AI_OPTIONS.items():
@@ -114,13 +118,16 @@ class RedrawWorkflow(WorkflowEntrypoint):
             form.append("input_image_0", Blob(reference, "image/jpeg"), "input.jpg")
 
             serialized = Response(form)
+            multipart_type = serialized.headers["content-type"]
+            multipart_body = await serialized.bytes()
+
             try:
                 generated = await self.env.AI.run(
                     MODEL,
                     {
                         "multipart": {
-                            "body": serialized.body,
-                            "contentType": serialized.headers["content-type"],
+                            "body": multipart_body,
+                            "contentType": multipart_type,
                         }
                     },
                 )
@@ -128,21 +135,14 @@ class RedrawWorkflow(WorkflowEntrypoint):
                 if hasattr(exc, "message") and ai_error_code(exc.message) != AI_SAFETY_ERROR_CODE:
                     raise
                 # Returning rather than raising checkpoints the step, which is
-                # what actually guarantees no further inference happens.
-                await bucket.put(
-                    failure_key(job_id),
-                    SAFETY_REJECTED_REASON,
-                    customMetadata={"jobId": job_id},
-                )
-                return {"ok": False, "reason": SAFETY_REJECTED_REASON}
+                # what guarantees no further inference happens.
+                return json.dumps({"ok": False, "reason": SAFETY_REJECTED_REASON})
 
             # FLUX replies with JSON holding a base64 image, so decode before storing.
             image = base64.b64decode(generated["image"])
             content_type = sniff_content_type(image)
             if content_type is None:
-                raise NonRetryableError(
-                    f"Model returned neither PNG nor JPEG bytes for job {job_id}."
-                )
+                return json.dumps({"ok": False, "reason": INVALID_OUTPUT_REASON})
 
             await bucket.put(
                 target_key,
@@ -150,10 +150,16 @@ class RedrawWorkflow(WorkflowEntrypoint):
                 httpMetadata={"contentType": content_type},
                 customMetadata={"jobId": job_id},
             )
-            return {"ok": True, "key": target_key, "contentType": content_type}
+            return json.dumps({"ok": True, "key": target_key})
 
-        result = await redraw()
+        result = json.loads(await redraw())
         if not result["ok"]:
+            await bucket.put(
+                failure_key(job_id),
+                result["reason"],
+                httpMetadata={"contentType": "text/plain"},
+                customMetadata={"jobId": job_id},
+            )
             # Raised outside the retrying step so the failure is final.
             raise NonRetryableError(result["reason"])
-        return result
+        return None

@@ -10,7 +10,6 @@ from .constants import (
     LIST_PAGE_SIZE,
     MAX_UPLOAD_BYTES,
     OUTPUT_PREFIX,
-    SAFETY_REJECTED_REASON,
     STATUS_MAP,
     failure_key,
     is_job_id,
@@ -53,15 +52,13 @@ async def create_job(request: Request) -> dict[str, str]:
     job_id = uuid.uuid4().hex
     created_at = datetime.now(UTC).isoformat()
 
-    # Store the original image
     await env.REDRAW_BUCKET.put(
         original_key(job_id),
         image,
         httpMetadata={"contentType": content_type},
         customMetadata={"createdAt": created_at},
     )
-    
-    # Enqueue the job
+
     try:
         await env.REDRAW_QUEUE.send({"jobId": job_id})
     except Exception:
@@ -85,6 +82,8 @@ async def list_jobs(request: Request) -> dict[str, list[dict[str, str]]]:
         listed = await bucket.list(**options)
         for obj in listed["objects"]:
             job_id = job_id_from_output_key(obj.key)
+            if not is_job_id(job_id):
+                continue
             jobs.append(
                 {
                     "jobId": job_id,
@@ -118,8 +117,10 @@ async def get_job(job_id: str, request: Request) -> dict[str, str]:
             "outputUrl": f"/api/images/output/{job_id}",
         }
 
-    if await bucket.head(failure_key(job_id)) is not None:
-        return {"jobId": job_id, "status": "failed", "reason": SAFETY_REJECTED_REASON}
+    failure = await bucket.get(failure_key(job_id))
+    if failure is not None:
+        blob = await failure.blob()
+        return {"jobId": job_id, "status": "failed", "reason": await blob.text()}
 
     if await bucket.head(original_key(job_id)) is None:
         raise HTTPException(404, "Job not found.")
