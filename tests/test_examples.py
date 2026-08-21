@@ -173,6 +173,87 @@ def test_10_workflows(dev_server):
     assert isinstance(status, dict)
 
 
+@pytest.fixture
+def init_fastapi_todo_db():
+    subprocess.run(
+        [
+            "uv",
+            "run",
+            "pywrangler",
+            "d1",
+            "execute",
+            "todos",
+            "--local",
+            "--file",
+            "db_init.sql",
+        ],
+        cwd=REPO_ROOT / "fastapi-todo",
+        check=True,
+    )
+
+
+def test_fastapi_todo(init_fastapi_todo_db, dev_server):
+    port = dev_server
+    base = f"http://localhost:{port}/todos"
+
+    # DELETE all todos
+    response = requests.delete(base)
+    assert response.status_code == 200
+
+    # GET should return empty list
+    response = requests.get(base)
+    assert response.status_code == 200
+    assert response.json() == []
+
+    # POST a new todo
+    response = requests.post(base, json={"title": "walk the dog"})
+    assert response.status_code == 200
+    todo = response.json()
+    assert todo["title"] == "walk the dog"
+    assert todo["completed"] is False
+    assert "url" in todo
+    todo_url = todo["url"]
+
+    # GET the individual todo by its url
+    response = requests.get(todo_url)
+    assert response.status_code == 200
+    assert response.json()["title"] == "walk the dog"
+
+    # PATCH the todo
+    response = requests.patch(
+        todo_url, json={"title": "bathe the cat", "completed": True}
+    )
+    assert response.status_code == 200
+    patched = response.json()
+    assert patched["title"] == "bathe the cat"
+    assert patched["completed"] is True
+
+    # POST a todo with an order field
+    response = requests.post(base, json={"title": "ordered todo", "order": 42})
+    assert response.status_code == 200
+    assert response.json()["order"] == 42
+
+    # GET all todos should return 2
+    response = requests.get(base)
+    assert response.status_code == 200
+    assert len(response.json()) == 2
+
+    # DELETE individual todo
+    response = requests.delete(todo_url)
+    assert response.status_code == 200
+
+    # GET all todos should return 1
+    response = requests.get(base)
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+    # DELETE all
+    response = requests.delete(base)
+    assert response.status_code == 200
+    response = requests.get(base)
+    assert response.json() == []
+
+
 def test_18_django(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
