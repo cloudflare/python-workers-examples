@@ -36,7 +36,7 @@ def pywrangler_dev_server(directory: str):
     # Wait for server to be ready
     ready = False
     timeout = 30
-    if "CI" in os.environ and directory.startswith("01"):
+    if "CI" in os.environ and directory == "hello":
         # Starting the server the first time takes a really long time in CI.
         # TODO: Why does this happen?
         timeout = 300
@@ -76,7 +76,7 @@ def dev_server(request):
         return
 
     test_name = request.node.name
-    # Extract directory name from test name (e.g., "test_01_hello" -> "01-hello")
+    # Extract directory name from test name (e.g., "test_hello" -> "hello")
     dir_name = test_name.replace("test_", "").replace("_", "-")
 
     with pywrangler_dev_server(dir_name) as port:
