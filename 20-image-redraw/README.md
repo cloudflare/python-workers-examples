@@ -7,46 +7,43 @@ Upload a picture and get it back redrawn as a wobbly MS Paint doodle.
 This example demonstrates how to leverage multiple Cloudflare services to
 create a full-featured image processing pipeline using Python Workers.
 
-- [Python Workers / FastAPI](https://fastapi.tiangolo.com/) - For API server
-- [R2](https://developers.cloudflare.com/r2/) - Storing images
-- [Workers AI](https://developers.cloudflare.com/workers-ai/) - Image-to-image inference
-- [Queues](https://developers.cloudflare.com/queues/) - Work queue
-- [Workflows](https://developers.cloudflare.com/workflows/) - Durable execution
+## What it uses
+
+- [Python Workers](https://developers.cloudflare.com/workers/languages/python/) — the runtime
+- [FastAPI](https://fastapi.tiangolo.com/) — the HTTP API, served over ASGI
+- [R2](https://developers.cloudflare.com/r2/) — stores uploaded originals and redrawn outputs
+- [Queues](https://developers.cloudflare.com/queues/) — hands work off the request path
+- [Workflows](https://developers.cloudflare.com/workflows/) — durable, retrying background execution
+- [Workers AI](https://developers.cloudflare.com/workers-ai/) — image generation guided by the uploaded reference
+- [Pillow](https://pillow.readthedocs.io/en/stable/) — image normalization inside the Workflow
+- [Static Assets](https://developers.cloudflare.com/workers/static-assets/) — the plain HTML/CSS/JS frontend
 
 ```mermaid
 flowchart LR
     Browser["Browser"]
+    Worker["Python Worker<br/>FastAPI"]
+    Queue[["Queue"]]
+    Workflow["Workflow"]
+    R2[("R2")]
+    AI["Workers AI"]
 
-    subgraph Worker["Python Worker"]
-        Assets["Static Assets"]
-        API["FastAPI<br/>/api/*"]
-        Consumer["Queue consumer"]
-        Workflow["RedrawWorkflow<br/>durable steps"]
-    end
-
-    Queue[["Queue<br/>image-redraw-jobs"]]
-    Originals[("R2<br/>originals/{jobId}")]
-    Outputs[("R2<br/>outputs/{jobId}")]
-    AI["Workers AI<br/>image-to-image"]
-
-    Browser -->|"GET /"| Assets
-    Browser -->|"POST /api/jobs"| API
-    API -->|"1. put image bytes"| Originals
-    API -->|"2. send jobId only"| Queue
-    API -->|"3. 202 Accepted + jobId"| Browser
-    Queue -->|"batch of jobId only"| Consumer
-    Consumer -->|"instance id = jobId"| Workflow
-    Originals -->|"read original"| Workflow
-    Workflow -->|"multipart reference image"| AI
-    AI -->|"base64 PNG or JPEG"| Workflow
-    Workflow -->|"store bytes + content type"| Outputs
-    Browser -->|"poll GET /api/jobs/{jobId}"| API
-    Outputs -->|"status + redrawn bytes"| API
+    Browser --> Worker
+    Worker --> R2
+    Worker --> Queue
+    Queue --> Workflow
+    Workflow --> R2
+    Workflow --> AI
 ```
 
-The uploaded image is stored in R2 and the job ID is enqueued to the queue. The
-queue consumer turns each batch of messages into Workflow instances.
-Workflows call the Workers AI API to redraw the image and stores the result in R2.
+## The flow
+
+1. The browser POSTs the image bytes to the Worker.
+2. FastAPI validates the image and stores the original in R2, and
+   enqueues the job.
+3. The queue consumer turns each batch of IDs into Workflow instances.
+4. The Workflow reads the original from R2, normalizes it with Pillow, calls
+   Workers AI, and stores the result back in R2.
+
 
 ## Setup
 

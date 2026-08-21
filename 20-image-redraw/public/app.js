@@ -4,7 +4,12 @@ const JPEG_QUALITY = 0.82;
 const POLL_INTERVAL_MS = 2000;
 const MAX_POLLS = 150;
 const MAX_POLL_FAILURES = 3;
-const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp"];
+const TYPE_LABELS = {
+  "image/png": "PNG",
+  "image/jpeg": "JPEG",
+  "image/webp": "WebP",
+};
+const ACCEPTED_TYPES = Object.keys(TYPE_LABELS);
 
 const byId = (id) => document.getElementById(id);
 const uploadForm = byId("upload-form");
@@ -23,7 +28,7 @@ const gallery = byId("gallery");
 const galleryStatus = byId("gallery-status");
 const refreshButton = byId("refresh-button");
 
-let prepared = null;
+let rawUpload = null;
 let previewUrl = null;
 let selectedJobId = null;
 
@@ -46,6 +51,12 @@ function formatTime(isoString) {
   });
 }
 
+function formatBytes(bytes) {
+  const kilobytes = bytes / 1024;
+  if (kilobytes < 1000) return `${kilobytes.toFixed(1)} KB`;
+  return `${(kilobytes / 1024).toFixed(2)} MB`;
+}
+
 async function requestJson(path, options) {
   let response;
   try {
@@ -62,54 +73,41 @@ async function requestJson(path, options) {
   return data;
 }
 
-// FLUX reference images must be under 512x512, so letterbox on white at 511x511.
-async function prepareUpload(file) {
+// Decodes only to prove the bytes are an image and to read the source size.
+// The bitmap is discarded; the original File is what gets uploaded.
+async function readSourceSize(file) {
   let bitmap;
   try {
     bitmap = await createImageBitmap(file);
   } catch {
     throw new Error("That file could not be decoded as an image.");
   }
-
-  const scale = Math.min(1, CANVAS_SIZE / Math.max(bitmap.width, bitmap.height));
-  const width = Math.max(1, Math.round(bitmap.width * scale));
-  const height = Math.max(1, Math.round(bitmap.height * scale));
-  const source = `${bitmap.width}x${bitmap.height}`;
-
-  const canvas = document.createElement("canvas");
-  canvas.width = CANVAS_SIZE;
-  canvas.height = CANVAS_SIZE;
-  const context = canvas.getContext("2d");
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-  context.drawImage(
-    bitmap,
-    (CANVAS_SIZE - width) / 2,
-    (CANVAS_SIZE - height) / 2,
-    width,
-    height,
-  );
+  const size = { width: bitmap.width, height: bitmap.height };
   bitmap.close?.();
+  return size;
+}
 
-  const blob = await new Promise((resolve) => {
-    canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY);
-  });
-  if (!blob) throw new Error("This browser could not encode the resized image.");
-  if (blob.size > MAX_BYTES) {
+async function inspectFile(file) {
+  if (!ACCEPTED_TYPES.includes(file.type)) {
+    throw new Error("Only PNG, JPEG and WebP are supported.");
+  }
+  if (file.size > MAX_BYTES) {
     throw new Error(
-      `The resized image is still ${blob.size.toLocaleString()} bytes, over the ${MAX_BYTES.toLocaleString()} byte limit. Try a smaller picture.`,
+      `That file is ${file.size.toLocaleString()} bytes, over the ${MAX_UPLOAD_BYTES.toLocaleString()} byte limit. Try a smaller picture.`,
     );
   }
 
-  const kilobytes = (blob.size / 1024).toFixed(1);
+  const { width, height } = await readSourceSize(file);
+  const label = TYPE_LABELS[file.type];
   return {
-    blob,
-    caption: `${source} drawn at ${width}x${height} on ${CANVAS_SIZE}x${CANVAS_SIZE} - JPEG q${JPEG_QUALITY}, ${kilobytes} KB`,
+    file,
+    caption:
+      `${width}x${height} ${label} (${file.type}), ${formatBytes(file.size)}`,
   };
 }
 
 async function showPreview() {
-  prepared = null;
+  rawUpload = null;
   preview.hidden = true;
   if (previewUrl) URL.revokeObjectURL(previewUrl);
   previewUrl = null;
@@ -119,19 +117,15 @@ async function showPreview() {
     setStatus(uploadStatus, "");
     return;
   }
-  if (!ACCEPTED_TYPES.includes(file.type)) {
-    setStatus(uploadStatus, "Only PNG, JPEG and WebP are supported.", "error");
-    return;
-  }
 
-  setStatus(uploadStatus, "Squashing your picture onto a 511x511 canvas...");
+  setStatus(uploadStatus, "Checking your picture...");
   try {
-    prepared = await prepareUpload(file);
-    previewUrl = URL.createObjectURL(prepared.blob);
+    rawUpload = await inspectFile(file);
+    previewUrl = URL.createObjectURL(rawUpload.file);
     previewImage.src = previewUrl;
     previewImage.alt =
-      "Your picture centred on a 511 by 511 white square, exactly as the AI will see it.";
-    previewCaption.textContent = prepared.caption;
+      "The original picture you chose, shown at full size before it is uploaded.";
+    previewCaption.textContent = rawUpload.caption;
     preview.hidden = false;
     setStatus(uploadStatus, 'Ready. Press "Redraw it!".');
   } catch (error) {
@@ -139,6 +133,7 @@ async function showPreview() {
   }
 }
 
+// Resolves with the terminal job object so the caller can read job.reason.
 async function pollJob(jobId) {
   let failures = 0;
 
@@ -157,7 +152,7 @@ async function pollJob(jobId) {
       continue;
     }
 
-    if (job.status === "complete" || job.status === "failed") return job.status;
+    if (job.status === "complete" || job.status === "failed") return job;
     setStatus(
       uploadStatus,
       `Job ${shortId(jobId)} is ${job.status}... (checked ${attempt} times)`,
@@ -238,8 +233,8 @@ async function loadGallery(jobIdToSelect) {
 
 uploadForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  if (!prepared) await showPreview();
-  if (!prepared) {
+  if (!rawUpload) await showPreview();
+  if (!rawUpload) {
     if (!fileInput.files?.length) {
       setStatus(uploadStatus, "Choose a picture first.", "error");
     }
@@ -247,22 +242,29 @@ uploadForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  const upload = rawUpload.file;
   fileInput.disabled = true;
   submitButton.disabled = true;
   try {
-    setStatus(uploadStatus, "Uploading to the Python Worker...");
-    const job = await requestJson("/api/jobs", {
+    setStatus(uploadStatus, "Uploading to the Worker...");
+    const created = await requestJson("/api/jobs", {
       method: "POST",
-      headers: { "Content-Type": prepared.blob.type },
-      body: prepared.blob,
+      headers: { "Content-Type": upload.type },
+      body: upload,
     });
 
-    setStatus(uploadStatus, `Job ${shortId(job.jobId)} is queued...`);
-    if ((await pollJob(job.jobId)) === "complete") {
+    setStatus(uploadStatus, `Job ${shortId(created.jobId)} is queued...`);
+    const job = await pollJob(created.jobId);
+    if (job.status === "complete") {
       setStatus(uploadStatus, "Finished! Behold the artwork.", "done");
       await loadGallery(job.jobId);
     } else {
-      setStatus(uploadStatus, "The Workflow gave up on that one.", "error");
+      // The backend only ever sends a reason it is happy to show a visitor.
+      const reason =
+        typeof job.reason === "string" && job.reason
+          ? job.reason
+          : "The Workflow gave up on that one.";
+      setStatus(uploadStatus, reason, "error");
     }
   } catch (error) {
     setStatus(uploadStatus, error.message, "error");
