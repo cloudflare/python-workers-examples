@@ -1,0 +1,21 @@
+fastapi-todo/package-lock.json
+  s_745c05ceaa09e2::t_f7315419f7a528 1-1539
+fastapi-todo/src/worker.py
+  s_745c05ceaa09e2::t_0a49f1b3f700f1 1-136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7860bb33ba4d033f545cd0406cf91a1500862d57",
+  "prompts": {},
+  "sessions": {
+    "s_745c05ceaa09e2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe084dafcffeYsUNLZ8s8b7qs5",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Dominik Picheta <dominik@cloudflare.com>"
+    }
+  }
+}
