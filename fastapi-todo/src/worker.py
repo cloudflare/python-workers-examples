@@ -1,8 +1,8 @@
 import uuid
 
-from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from workers import WorkerEntrypoint
+
+from fastapi import FastAPI, Request
 
 app = FastAPI()
 
@@ -128,5 +128,7 @@ async def delete_todo(todo_id: str, request: Request):
     await _db(request).prepare("DELETE FROM todos WHERE id = ?").bind(todo_id).run()
     return []
 
+
 import asgi
+
 Default = asgi.entrypoint(app)
