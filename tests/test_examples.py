@@ -6,7 +6,7 @@ import requests
 from conftest import REPO_ROOT
 
 
-def test_01_hello(dev_server):
+def test_hello(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -14,7 +14,7 @@ def test_01_hello(dev_server):
     assert response.headers["content-type"] == "text/plain;charset=UTF-8"
 
 
-def test_02_binding(dev_server):
+def test_binding(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -22,7 +22,7 @@ def test_02_binding(dev_server):
     assert response.headers["content-type"] == "text/plain;charset=UTF-8"
 
 
-def test_03_fastapi(dev_server):
+def test_fastapi(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -57,13 +57,13 @@ def init_db():
             "--file",
             "db_init.sql",
         ],
-        cwd=REPO_ROOT / "04-query-d1",
+        cwd=REPO_ROOT / "query-d1",
         check=True,
     )
 
 
 @pytest.mark.xfail(reason="500 error, fixme")
-def test_04_query_d1(init_db, dev_server):
+def test_query_d1(init_db, dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -75,11 +75,11 @@ def test_04_query_d1(init_db, dev_server):
 
 
 @pytest.mark.xfail(reason="Requires remote bindings")
-def test_05_langchain(dev_server):
+def test_langchain(dev_server):
     pass
 
 
-def test_06_assets(dev_server):
+def test_assets(dev_server):
     port = dev_server
     pairs = [
         ("", "text/html; charset=utf-8"),
@@ -96,7 +96,7 @@ def test_06_assets(dev_server):
         assert response.headers["content-type"] == content_type
 
 
-def test_07_durable_objects(dev_server):
+def test_durable_objects(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}/room-1/show")
     assert response.status_code == 200
@@ -112,7 +112,7 @@ def test_07_durable_objects(dev_server):
     assert response.text == "No messages"
 
 
-def test_16_sync_http_clients(dev_server):
+def test_sync_http_clients(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}/sync")
     assert response.status_code == 200
@@ -130,7 +130,7 @@ def test_16_sync_http_clients(dev_server):
         assert result["saw_expected_text"] is True
 
 
-def test_08_cron(dev_server):
+def test_cron(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -139,7 +139,7 @@ def test_08_cron(dev_server):
 
 
 @pytest.mark.xfail(reason="AI binding may not work in local dev")
-def test_09_workers_ai(dev_server):
+def test_workers_ai(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -149,7 +149,7 @@ def test_09_workers_ai(dev_server):
 
 
 @pytest.mark.xfail(reason="500 error, fixme")
-def test_10_workflows(dev_server):
+def test_workflows(dev_server):
     port = dev_server
     # Test default endpoint
     response = requests.get(f"http://localhost:{port}")
@@ -173,7 +173,7 @@ def test_10_workflows(dev_server):
     assert isinstance(status, dict)
 
 
-def test_18_django(dev_server):
+def test_django(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
     assert response.status_code == 200
@@ -182,7 +182,7 @@ def test_18_django(dev_server):
 
 
 @pytest.fixture
-def init_19_django_todo_d1_db():
+def init_django_todo_d1_db():
     subprocess.run(
         [
             "uv",
@@ -194,12 +194,12 @@ def init_19_django_todo_d1_db():
             "django-todo-d1",
             "--local",
         ],
-        cwd=REPO_ROOT / "19-django-todo-d1",
+        cwd=REPO_ROOT / "django-todo-d1",
         check=True,
     )
 
 
-def test_19_django_todo_d1(init_19_django_todo_d1_db, dev_server):
+def test_django_todo_d1(init_django_todo_d1_db, dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}/api/health/")
     assert response.status_code == 200
