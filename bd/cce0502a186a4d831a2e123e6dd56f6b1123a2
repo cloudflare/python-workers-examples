@@ -1,0 +1,17 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "bdcce0502a186a4d831a2e123e6dd56f6b1123a2",
+  "prompts": {},
+  "sessions": {
+    "s_745c05ceaa09e2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe084dafcffeYsUNLZ8s8b7qs5",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Dominik Picheta <dominik@cloudflare.com>"
+    }
+  }
+}
