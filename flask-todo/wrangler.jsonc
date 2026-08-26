@@ -1,0 +1,19 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "flask-todo",
+	"main": "src/worker.py",
+	"compatibility_date": "2026-08-01",
+	"compatibility_flags": [
+		"python_workers",
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "todos",
+			"database_id": "00000000-0000-0000-0000-000000000000"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
