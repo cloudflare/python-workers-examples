@@ -8,7 +8,6 @@ from .constants import (
     ALLOWED_CONTENT_TYPES,
     GALLERY_SIZE,
     LIST_PAGE_SIZE,
-    MAX_UPLOAD_BYTES,
     OUTPUT_PREFIX,
     STATUS_MAP,
     failure_key,
@@ -33,20 +32,13 @@ def declared_length(request: Request) -> int | None:
 
 @app.post("/api/jobs", status_code=202)
 async def create_job(request: Request) -> dict[str, str]:
-    content_type = request.headers.get("content-type", "").split(";")[0].strip().lower()
-    if content_type not in ALLOWED_CONTENT_TYPES:
+    content_type = request.headers.get("content-type", "")
+    if not content_type.startswith(ALLOWED_CONTENT_TYPES):
         raise HTTPException(415, "Send a raw image/png, image/jpeg or image/webp body.")
-
-    too_long = f"Images must be at most {MAX_UPLOAD_BYTES} bytes."
-    length = declared_length(request)
-    if length is not None and length > MAX_UPLOAD_BYTES:
-        raise HTTPException(413, too_long)
 
     image = await request.body()
     if not image:
         raise HTTPException(400, "The request body is empty.")
-    if len(image) > MAX_UPLOAD_BYTES:
-        raise HTTPException(413, too_long)
 
     env = request.scope["env"]
     job_id = uuid.uuid4().hex
@@ -151,7 +143,6 @@ async def get_image(kind: str, job_id: str, request: Request) -> Response:
     if obj is None:
         raise HTTPException(404, "Image not found.")
 
-    # Serve the type recorded when the bytes were stored; never guess from the key.
     http_metadata = obj.httpMetadata
     media_type = http_metadata.contentType if http_metadata is not None else None
     blob = await obj.blob()

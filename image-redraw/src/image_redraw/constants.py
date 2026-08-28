@@ -25,8 +25,7 @@ ORIGINAL_PREFIX = "originals/"
 OUTPUT_PREFIX = "outputs/"
 FAILURE_PREFIX = "failures/"
 
-ALLOWED_CONTENT_TYPES = {"image/png", "image/jpeg", "image/webp"}
-MAX_UPLOAD_BYTES = 5_000_000
+ALLOWED_CONTENT_TYPES = ("image/png", "image/jpeg", "image/webp")
 
 # A deliberately small, fixed canvas for this example: it keeps inference cheap
 # and every reference picture uniform. It is a choice made here, not a limit

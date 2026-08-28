@@ -26,7 +26,7 @@ from .constants import (
 )
 
 # Magic bytes, because the model tells us nothing about the format it picked.
-IMAGE_SIGNATURES = ((b"\x89PNG", "image/png"), (b"\xff\xd8\xff", "image/jpeg"))
+IMAGE_SIGNATURES = ((b"\x89PNG", "image/png"), (b"\xff\xd8\xff", "image/jpeg"), (b"RIFF", "image/webp"))
 
 
 class UnusableImageError(Exception):
