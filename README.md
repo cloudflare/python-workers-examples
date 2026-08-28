@@ -33,7 +33,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`sync-http-clients/`**](sync-http-clients) — demonstrates outbound HTTP with synchronous Python clients (`requests`, `urllib3`, and `httpx.Client`).
 - [**`dynamic-py-py/`**](dynamic-py-py) — shows how to load and run a Python Worker dynamically at runtime using a [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/) binding.
 - [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.
-- [**`django-todo-d1/`**](django-todo-d1) — uses Django with D1 for a basic TODO application.
+- [**`django-todo-d1/`**](django-todo-d1) — implements the Todo-Backend API with Django and D1.
 
 
 

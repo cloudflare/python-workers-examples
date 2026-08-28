@@ -6,12 +6,6 @@
 	"compatibility_flags": [
 		"python_workers"
 	],
-	"assets": {
-		"directory": "./public",
-		"run_worker_first": [
-			"/api/*"
-		]
-	},
 	"d1_databases": [
 		{
 			"binding": "DB",

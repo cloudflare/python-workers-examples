@@ -7,7 +7,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 INSTALLED_APPS = [
     "todos",
 ]
-MIDDLEWARE = []
+MIDDLEWARE = ["todos.middleware.CorsMiddleware"]
 DATABASES = {
     "default": {
         "ENGINE": "django_cf.db.backends.d1",
