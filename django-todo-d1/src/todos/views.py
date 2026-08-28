@@ -23,9 +23,7 @@ def parse_json_body(request):
         return None, JsonResponse({"error": "Invalid JSON body."}, status=400)
 
     if not isinstance(payload, dict):
-        return None, JsonResponse(
-            {"error": "JSON body must be an object."}, status=400
-        )
+        return None, JsonResponse({"error": "JSON body must be an object."}, status=400)
 
     return payload, None
 

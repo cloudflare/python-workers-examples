@@ -284,4 +284,3 @@ def init_django_todo_d1_db():
 
 def test_django_todo_d1(init_django_todo_d1_db, dev_server):
     assert_todo_backend(dev_server)
-
