@@ -1,7 +1,7 @@
 [project]
 name = "django-todo-d1-worker"
 version = "0.1.0"
-description = "Django TODO example backed by D1 via django-cf"
+description = "Django Todo-Backend implementation backed by D1 via django-cf"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
