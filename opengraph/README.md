@@ -53,11 +53,13 @@ To adapt this example for your own website:
 2. **Customize metadata patterns** in the `get_opengraph_data()` method:
    ```python
    if path.startswith("/your-section/"):
-       og_data.update({
-           "title": "Your Custom Title",
-           "description": "Your custom description",
-           "image": "https://your-image-url.com/image.jpg"
-       })
+       og_data.update(
+           {
+               "title": "Your Custom Title",
+               "description": "Your custom description",
+               "image": "https://your-image-url.com/image.jpg",
+           }
+       )
    ```
 
 3. **Add more URL patterns** to match your site structure
