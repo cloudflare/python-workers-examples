@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pyodide.ffi import run_sync
 from werkzeug.exceptions import HTTPException
-from workers import WorkerEntrypoint, wsgi
+from workers import wsgi
 
 app = Flask(__name__)
 # Preserve the field order used below rather than sorting keys alphabetically.
