@@ -32,9 +32,12 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`chatroom/`**](chatroom) - A real-time chatroom using WebSocket.
 - [**`sync-http-clients/`**](sync-http-clients) — demonstrates outbound HTTP with synchronous Python clients (`requests`, `urllib3`, and `httpx.Client`).
 - [**`dynamic-py-py/`**](dynamic-py-py) — shows how to load and run a Python Worker dynamically at runtime using a [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/) binding.
-- [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.
-- [**`django-todo-d1/`**](django-todo-d1) — implements the Todo-Backend API with Django and D1.
 - [**`image-redraw/`**](image-redraw) — an example that combines [FastAPI](https://fastapi.tiangolo.com/), [R2](https://developers.cloudflare.com/r2/), [Queues](https://developers.cloudflare.com/queues/), [Workflows](https://developers.cloudflare.com/workflows/) and [Workers AI](https://developers.cloudflare.com/workers-ai/) to redraw uploaded images.
+- [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.
+- [**`django-todo-d1/`**](django-todo-d1) — uses Django with D1 for a basic TODO application.
+- [**`fastapi-todo/`**](fastapi-todo) — implements the [Todo-Backend](https://todobackend.com) spec with FastAPI (ASGI) and D1.
+- [**`flask-todo/`**](flask-todo) — implements the same [Todo-Backend](https://todobackend.com) API with [Flask](https://flask.palletsprojects.com/) (WSGI) and D1.
+
 
 
 ## Open Beta and Limits
