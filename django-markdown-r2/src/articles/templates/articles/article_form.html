@@ -1,0 +1,28 @@
+{% extends "articles/base.html" %}
+
+{% block title %}{% if is_edit %}Edit {{ article.title }}{% else %}New article{% endif %} | Knowledge base{% endblock %}
+
+{% block content %}
+  <section>
+    <h1>{% if is_edit %}Edit article{% else %}New article{% endif %}</h1>
+    <form method="post"{% if not is_edit %} enctype="multipart/form-data"{% endif %}>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        {{ form.non_field_errors }}
+      {% endif %}
+      <fieldset>
+        <legend>Article details</legend>
+        {% for field in form %}
+          <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+            {{ field.errors }}
+          </p>
+        {% endfor %}
+      </fieldset>
+      <button type="submit">{% if is_edit %}Save changes{% else %}Create article{% endif %}</button>
+      <a href="{% if is_edit %}{% url 'article-detail' slug=article.slug %}{% else %}{% url 'article-list' %}{% endif %}">Cancel</a>
+    </form>
+  </section>
+{% endblock %}

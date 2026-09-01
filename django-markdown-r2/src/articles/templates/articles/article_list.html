@@ -1,0 +1,22 @@
+{% extends "articles/base.html" %}
+
+{% block title %}Articles | Knowledge base{% endblock %}
+
+{% block content %}
+  <section>
+    <h1>Articles</h1>
+    {% if articles %}
+      {% for article in articles %}
+        <article>
+          <header>
+            <h2><a href="{% url 'article-detail' slug=article.slug %}">{{ article.title }}</a></h2>
+          </header>
+          <p>{{ article.body|truncatechars:180 }}</p>
+        </article>
+      {% endfor %}
+    {% else %}
+      <p>No articles have been published yet.</p>
+      <p><a href="{% url 'article-create' %}">Create your first article</a></p>
+    {% endif %}
+  </section>
+{% endblock %}

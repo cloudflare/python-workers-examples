@@ -1,0 +1,23 @@
+{% extends "articles/base.html" %}
+
+{% block title %}{{ article.title }} | Knowledge base{% endblock %}
+
+{% block content %}
+  <article>
+    <header>
+      <h1>{{ article.title }}</h1>
+      <nav aria-label="Article actions">
+        <ul>
+          <li><a href="{% url 'article-list' %}">Back to articles</a></li>
+          <li><a href="{% url 'article-edit' slug=article.slug %}">Edit article</a></li>
+        </ul>
+      </nav>
+    </header>
+    {% if article.image %}
+      <figure>
+        <img src="{{ article.image.url }}" alt="{{ article.title }}">
+      </figure>
+    {% endif %}
+    {{ rendered_body }}
+  </article>
+{% endblock %}
