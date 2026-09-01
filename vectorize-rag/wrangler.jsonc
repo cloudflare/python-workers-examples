@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "python-vectorize-rag",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-09-01",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"ai": {
+		"binding": "AI",
+		"remote": true
+	},
+	"vectorize": [
+		{
+			"binding": "VECTORIZE",
+			"index_name": "python-rag-index",
+			"remote": true
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
