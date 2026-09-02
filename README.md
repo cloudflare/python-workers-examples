@@ -22,6 +22,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`langchain/`**](langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers. Currently broken.
 - [**`assets/`**](assets) — An example with an assets binding.
 - [**`durable-objects/`**](durable-objects) — An example with storing state in a [Durable Object](https://developers.cloudflare.com/durable-objects/).
+- [**`batched-counter/`**](batched-counter) — batches high-frequency counters with Durable Objects and PostgreSQL through Hyperdrive.
 - [**`cron/`**](cron) — shows a simple [cron job](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
 - [**`workers-ai/`**](workers-ai) makes a call [Workers AI](https://developers.cloudflare.com/workers-ai/) to run inference on Cloudflare's Global Network.
 - [**`vectorize-rag/`**](vectorize-rag) — a RAG example using remote Workers AI and [Vectorize](https://developers.cloudflare.com/vectorize/) bindings.
