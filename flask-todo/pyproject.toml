@@ -1,0 +1,17 @@
+[project]
+name = "flask-todo"
+version = "0.1.0"
+description = "Flask todo backend conforming to the todobackend.com spec"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask",
+    "flask-cors",
+    "workers-runtime-sdk>=1.8.2",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]

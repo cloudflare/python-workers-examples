@@ -24,6 +24,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`durable-objects/`**](durable-objects) — An example with storing state in a [Durable Object](https://developers.cloudflare.com/durable-objects/).
 - [**`cron/`**](cron) — shows a simple [cron job](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
 - [**`workers-ai/`**](workers-ai) makes a call [Workers AI](https://developers.cloudflare.com/workers-ai/) to run inference on Cloudflare's Global Network.
+- [**`vectorize-rag/`**](vectorize-rag) — a RAG example using remote Workers AI and [Vectorize](https://developers.cloudflare.com/vectorize/) bindings.
 - [**`workflows/`**](workflows) — shows a durable [Workflows](https://developers.cloudflare.com/workflows/) example.
 - [**`opengraph/`**](opengraph) — shows how to use [HTMLRewriter](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/) to generate OpenGraph images with Python Workers.
 - [**`image-gen/`**](image-gen) — shows how to use [Pillow](https://pillow.readthedocs.io/en/stable/) to generate images with Python Workers.
@@ -31,11 +32,15 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`websocket-stream-consumer/`**](websocket-stream-consumer) — shows how to use [WebSocket](https://developers.cloudflare.com/workers/runtime-apis/websockets/) to consume a stream of data with Python Workers.
 - [**`chatroom/`**](chatroom) - A real-time chatroom using WebSocket.
 - [**`sync-http-clients/`**](sync-http-clients) — demonstrates outbound HTTP with synchronous Python clients (`requests`, `urllib3`, and `httpx.Client`).
+- [**`url-shortener/`**](url-shortener) — a URL shortener backed by Workers KV.
 - [**`dynamic-py-py/`**](dynamic-py-py) — shows how to load and run a Python Worker dynamically at runtime using a [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/) binding.
-- [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.
-- [**`django-todo-d1/`**](django-todo-d1) — implements the Todo-Backend API with Django and D1.
-- [**`django-markdown-r2/`**](django-markdown-r2) — a server-rendered Django knowledge base using Durable Object SQLite for Markdown articles and R2 for optional images.
 - [**`image-redraw/`**](image-redraw) — an example that combines [FastAPI](https://fastapi.tiangolo.com/), [R2](https://developers.cloudflare.com/r2/), [Queues](https://developers.cloudflare.com/queues/), [Workflows](https://developers.cloudflare.com/workflows/) and [Workers AI](https://developers.cloudflare.com/workers-ai/) to redraw uploaded images.
+- [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.
+- [**`django-todo-d1/`**](django-todo-d1) — uses Django with D1 for a basic TODO application.
+- [**`django-markdown-r2/`**](django-markdown-r2) — a server-rendered Django blog using Durable Object SQLite and R2 for media storage.
+- [**`fastapi-todo/`**](fastapi-todo) — implements the [Todo-Backend](https://todobackend.com) spec with FastAPI (ASGI) and D1.
+- [**`flask-todo/`**](flask-todo) — implements the same [Todo-Backend](https://todobackend.com) API with [Flask](https://flask.palletsprojects.com/) (WSGI) and D1.
+
 
 
 ## Open Beta and Limits
