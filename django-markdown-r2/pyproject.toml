@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "django",
-    "django-cf==0.2.15",
+    "django-cf>=0.2.16",
     "markdown-it-py==4.2.0",
 ]
 

@@ -7,7 +7,7 @@ A server-rendered knowledge base built with Django on Cloudflare Python Workers.
 ## Architecture
 
 - `KnowledgeBase` extends [DjangoCFDurableObject](https://pypi.org/project/django-cf/) and `DurableObject`; the Worker forwards every request to the fixed `knowledge-base` instance.
-- A small backend shim extends `django_cf.db.backends.do` so current and older DO SQL result types both work with Django's ORM.
+- Django's ORM uses the Durable Object database backend provided by `django-cf`.
 - The Durable Object constructor creates the `articles` table and its index with idempotent SQL.
 - `django_cf.storage.R2Storage` uses the `IMAGES` R2 binding with an `images/` key prefix.
 - The Worker serves private R2 objects through `GET /media/images/<name>`; images do not need a public R2 bucket URL.
@@ -55,4 +55,4 @@ The Durable Object is provisioned by the migration configuration on deploy. The 
 
 ## Current limitations
 
-Python Workers and `django-cf` are currently alpha/open-beta software. The compatibility shim is specific to the pinned `django-cf==0.2.15` release and can be removed when its Durable Object backend accepts Python list results directly. One fixed `knowledge-base` Durable Object provides strong consistency and serializes all database traffic, so this pattern is intended for a small knowledge base rather than high-throughput or globally sharded data. Its schema is created by idempotent SQL in the Durable Object constructor; there is no standard Django migration command. The example does not use Django admin, authentication, sessions, deletion, or image replacement/cleanup. Pyodide does not provide Django's timezone data here, so timestamps are stored as naive UTC values (`USE_TZ = False`).
+Python Workers and `django-cf` are currently alpha/open-beta software. One fixed `knowledge-base` Durable Object provides strong consistency and serializes all database traffic, so this pattern is intended for a small knowledge base rather than high-throughput or globally sharded data. Its schema is created by idempotent SQL in the Durable Object constructor; there is no standard Django migration command. The example does not use Django admin, authentication, sessions, deletion, or image replacement/cleanup. Pyodide does not provide Django's timezone data here, so timestamps are stored as naive UTC values (`USE_TZ = False`).
