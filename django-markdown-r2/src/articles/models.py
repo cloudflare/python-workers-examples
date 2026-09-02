@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.text import slugify
 
 
-def generate_article_id():
+def generate_article_id() -> str:
     return str(uuid.uuid4())
 
 

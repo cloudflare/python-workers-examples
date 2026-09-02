@@ -1,7 +1,9 @@
 import os
 
 from django_cf import DjangoCFDurableObject
-from workers import DurableObject, WorkerEntrypoint
+from workers import DurableObject, Request, Response, WorkerEntrypoint
+
+KNOWLEDGE_BASE_NAME: str = "blog"
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "markdown_project.settings")
 from markdown_project.wsgi import application
@@ -32,7 +34,7 @@ class KnowledgeBase(DjangoCFDurableObject, DurableObject):
 
 
 class Default(WorkerEntrypoint):
-    async def fetch(self, request):
-        id = self.env.DO_STORAGE.idFromName("knowledge-base")
-        stub = self.env.DO_STORAGE.get(id)
+    async def fetch(self, request: Request) -> Response:
+        do_id = self.env.DO_STORAGE.idFromName(KNOWLEDGE_BASE_NAME)
+        stub = self.env.DO_STORAGE.get(do_id)
         return await stub.fetch(request)

@@ -30,16 +30,6 @@
           </footer>
         </article>
       {% endfor %}
-    {% else %}
-      <article aria-labelledby="empty-state-heading">
-        <header>
-          <h2 id="empty-state-heading">The library is ready for its first entry</h2>
-        </header>
-        <p>No articles have been published yet. Start with a note your future readers will be glad to find.</p>
-        <footer>
-          <a href="{% url 'article-create' %}" role="button">Create the first article</a>
-        </footer>
-      </article>
     {% endif %}
   </section>
 {% endblock %}

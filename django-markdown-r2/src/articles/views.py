@@ -1,15 +1,16 @@
+from datetime import datetime
 from pathlib import PurePosixPath
 
 from django.core.files.storage import default_storage
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeString, mark_safe
 from markdown_it import MarkdownIt
 
 from .forms import ArticleEditForm, ArticleForm
 from .models import Article
 
-IMAGE_CONTENT_TYPES = {
+IMAGE_CONTENT_TYPES: dict[str, str] = {
     ".gif": "image/gif",
     ".jpeg": "image/jpeg",
     ".jpg": "image/jpeg",
@@ -18,11 +19,11 @@ IMAGE_CONTENT_TYPES = {
 }
 
 
-def render_markdown(markdown):
+def render_markdown(markdown: str) -> SafeString:
     return mark_safe(MarkdownIt("js-default").render(markdown))
 
 
-def format_date(value):
+def format_date(value: datetime) -> str:
     return f"{value:%B} {value.day}, {value.year}"
 
 
@@ -74,15 +75,8 @@ def article_edit(request, slug):
     )
 
 
-def media_image(request, name):
+def media_image(_request, name: str) -> HttpResponse:
     path = PurePosixPath(name)
-    if (
-        not name
-        or "\\" in name
-        or path.is_absolute()
-        or any(part in {"", ".", ".."} for part in path.parts)
-    ):
-        raise Http404
     content_type = IMAGE_CONTENT_TYPES.get(path.suffix.lower())
     if content_type is None or not default_storage.exists(name):
         raise Http404
