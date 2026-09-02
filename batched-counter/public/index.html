@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A Durable Object and Hyperdrive batching demo.">
+    <title>Reaction Counter</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./style.css">
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="control-room">
+      <header class="masthead">
+        <div class="masthead-row">
+          <h1>Reaction <em>Counter</em></h1>
+        </div>
+      </header>
+
+      <section class="panel room-panel" aria-labelledby="room-heading">
+        <div>
+          <p class="eyebrow">Channel selection</p>
+          <h2 id="room-heading">Tune into a room</h2>
+        </div>
+        <form id="room-form" class="room-form">
+          <label for="room-input">Room name</label>
+          <div class="room-input-row">
+            <input id="room-input" name="room" value="demo-room" maxlength="64" autocomplete="off" aria-describedby="room-help" required>
+            <button class="join-button" type="submit">Join room</button>
+          </div>
+        </form>
+        <p id="connection" class="connection" data-state="idle"><span aria-hidden="true"></span><span id="connection-text">Not joined</span></p>
+      </section>
+
+      <section class="panel" aria-labelledby="controls-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">On-air controls</p>
+            <h2 id="controls-heading">Send a reaction</h2>
+          </div>
+          <p class="room-readout">Room: <strong id="active-room">—</strong></p>
+        </div>
+        <div class="reaction-controls" aria-label="Reaction controls">
+          <button class="reaction-button" type="button" data-reaction="heart" disabled><span aria-hidden="true">❤️</span>Heart</button>
+          <button class="reaction-button" type="button" data-reaction="laugh" disabled><span aria-hidden="true">😂</span>Laugh</button>
+          <button class="reaction-button" type="button" data-reaction="fire" disabled><span aria-hidden="true">🔥</span>Fire</button>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="ledger-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Signal ledger</p>
+            <h2 id="ledger-heading">Reaction counts</h2>
+          </div>
+          <p id="last-synced" class="sync-note">Join a room to begin polling.</p>
+        </div>
+        <div class="total-readout"><span>All accepted</span><strong id="total-accepted">0</strong></div>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Reaction totals, database-persisted counts, and pending counts</caption>
+            <thead><tr><th scope="col">Reaction</th><th scope="col">Accepted</th><th scope="col">Persisted</th><th scope="col">Pending</th></tr></thead>
+            <tbody id="stats-body">
+              <tr data-reaction="heart"><th scope="row">Heart</th><td data-field="totals">—</td><td data-field="persisted">—</td><td data-field="pending">—</td></tr>
+              <tr data-reaction="laugh"><th scope="row">Laugh</th><td data-field="totals">—</td><td data-field="persisted">—</td><td data-field="pending">—</td></tr>
+              <tr data-reaction="fire"><th scope="row">Fire</th><td data-field="totals">—</td><td data-field="persisted">—</td><td data-field="pending">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="batch-cycle" class="panel batch-cycle" aria-labelledby="batch-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Batch runway</p>
+          </div>
+          <p id="batch-status" class="sync-note">No reactions waiting to be persisted.</p>
+        </div>
+        <div class="cycle-track" role="img" aria-label="Pending reactions are buffered for up to five seconds before a database write.">
+          <span class="cycle-sweep" aria-hidden="true"></span>
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+        </div>
+      </section>
+
+      <p id="app-status" class="app-status" role="status" aria-live="polite"></p>
+      <noscript><p class="app-status">This page needs JavaScript to send and poll reactions.</p></noscript>
+    </main>
+  </body>
+</html>

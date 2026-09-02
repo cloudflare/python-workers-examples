@@ -1,0 +1,42 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "batched-counter",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-09-02",
+	"compatibility_flags": [
+		"python_workers",
+		"python_workers_314"
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "REACTION_ROOMS",
+				"class_name": "ReactionRoom"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"ReactionRoom"
+			]
+		}
+	],
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "00000000-0000-0000-0000-000000000001",
+			"localConnectionString": "postgres://reactions:reactions@localhost:5432/reactions"
+		}
+	],
+	"assets": {
+		"directory": "./public",
+		"run_worker_first": [
+			"/rooms/*"
+		]
+	},
+	"observability": {
+		"enabled": true
+	}
+}

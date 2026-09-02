@@ -1,0 +1,16 @@
+[project]
+name = "batched-counter"
+version = "0.0.0"
+description = "Batched counters with Durable Objects and Hyperdrive"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "pg8000",
+    "starlette>=0.48.0"
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]
