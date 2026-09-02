@@ -1,4 +1,6 @@
+import re
 import subprocess
+import uuid
 
 import pytest
 import requests
@@ -386,3 +388,27 @@ def init_django_todo_d1_db():
 
 def test_django_todo_d1(init_django_todo_d1_db, dev_server):
     assert_todo_backend(dev_server)
+
+
+def csrf_token(session, base_url, path):
+    response = session.get(f"{base_url}{path}")
+    assert response.status_code == 200
+    match = re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', response.text)
+    assert match is not None
+    return match.group(1)
+
+
+def test_django_markdown_r2(dev_server):
+    base_url = f"http://localhost:{dev_server}"
+    session = requests.Session()
+    article_id = uuid.uuid4().hex
+    title = f"Safe Markdown {article_id}"
+    slug = f"safe-markdown-{article_id}"
+
+    response = session.get(base_url)
+    assert response.status_code == 200
+    assert '<h1 id="articles-heading">Articles</h1>' in response.text
+    assert (
+        session.get(f"{base_url}/articles/missing-{uuid.uuid4().hex}/").status_code
+        == 404
+    )

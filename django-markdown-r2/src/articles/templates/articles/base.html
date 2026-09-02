@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Knowledge base{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.classless.min.css">
+</head>
+<body>
+  <header>
+    <nav aria-label="Primary navigation">
+      <ul>
+        <li><strong><a href="{% url 'article-list' %}">Knowledge base</a></strong></li>
+      </ul>
+      <ul>
+        <li><a href="{% url 'article-list' %}">Articles</a></li>
+        <li><a href="{% url 'article-create' %}">Create article</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <small>Knowledge base</small>
+  </footer>
+</body>
+</html>
