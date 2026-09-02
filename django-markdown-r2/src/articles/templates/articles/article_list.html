@@ -3,20 +3,43 @@
 {% block title %}Articles | Knowledge base{% endblock %}
 
 {% block content %}
-  <section>
-    <h1>Articles</h1>
+  <section aria-labelledby="articles-heading">
+    <header>
+      <hgroup>
+        <h1 id="articles-heading">Articles</h1>
+        <p>A reference library for practical notes and lasting answers.</p>
+      </hgroup>
+      <p><a href="{% url 'article-create' %}" role="button">Create article</a></p>
+    </header>
     {% if articles %}
       {% for article in articles %}
         <article>
           <header>
             <h2><a href="{% url 'article-detail' slug=article.slug %}">{{ article.title }}</a></h2>
+            <p>
+              <small>
+                Updated <time datetime="{{ article.updated_iso }}">{{ article.updated_date }}</time>
+              </small>
+            </p>
           </header>
-          <p>{{ article.body|truncatechars:180 }}</p>
+          <section aria-label="Article preview">
+            {{ article.rendered_body|truncatewords_html:45 }}
+          </section>
+          <footer>
+            <a href="{% url 'article-detail' slug=article.slug %}">Read article</a>
+          </footer>
         </article>
       {% endfor %}
     {% else %}
-      <p>No articles have been published yet.</p>
-      <p><a href="{% url 'article-create' %}">Create your first article</a></p>
+      <article aria-labelledby="empty-state-heading">
+        <header>
+          <h2 id="empty-state-heading">The library is ready for its first entry</h2>
+        </header>
+        <p>No articles have been published yet. Start with a note your future readers will be glad to find.</p>
+        <footer>
+          <a href="{% url 'article-create' %}" role="button">Create the first article</a>
+        </footer>
+      </article>
     {% endif %}
   </section>
 {% endblock %}

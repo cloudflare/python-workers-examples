@@ -299,11 +299,13 @@ def csrf_token(session, base_url, path):
 def test_django_markdown_r2(dev_server):
     base_url = f"http://localhost:{dev_server}"
     session = requests.Session()
-    slug = f"article-{uuid.uuid4().hex}"
+    article_id = uuid.uuid4().hex
+    title = f"Safe Markdown {article_id}"
+    slug = f"safe-markdown-{article_id}"
 
     response = session.get(base_url)
     assert response.status_code == 200
-    assert "<h1>Articles</h1>" in response.text
+    assert '<h1 id="articles-heading">Articles</h1>' in response.text
     assert (
         response.text.count(
             '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.classless.min.css">'
@@ -316,12 +318,13 @@ def test_django_markdown_r2(dev_server):
     )
 
     token = csrf_token(session, base_url, "/articles/new/")
+    create_form = session.get(f"{base_url}/articles/new/")
+    assert 'name="slug"' not in create_form.text
     response = session.post(
         f"{base_url}/articles/new/",
         data={
             "csrfmiddlewaretoken": token,
-            "title": "Safe Markdown",
-            "slug": slug,
+            "title": title,
             "body": "# Heading\n\n<script>alert('unsafe')</script>",
         },
         allow_redirects=False,
@@ -331,7 +334,7 @@ def test_django_markdown_r2(dev_server):
 
     article_list = session.get(base_url)
     assert article_list.status_code == 200
-    assert "# Heading" in article_list.text
+    assert "<h1>Heading</h1>" in article_list.text
     assert "&lt;script&gt;" in article_list.text
     assert "&lt;/script&gt;" in article_list.text
     assert "<script>alert('unsafe')</script>" not in article_list.text
@@ -347,23 +350,23 @@ def test_django_markdown_r2(dev_server):
         f"{base_url}/articles/new/",
         data={
             "csrfmiddlewaretoken": token,
-            "title": "Duplicate",
-            "slug": slug,
+            "title": title,
             "body": "Duplicate slug",
         },
+        allow_redirects=False,
     )
-    assert duplicate.status_code == 200
-    assert "An article with this slug already exists." in duplicate.text
+    assert duplicate.status_code == 302
+    assert duplicate.headers["Location"] == f"/articles/{slug}-2/"
 
-    image_slug = f"image-{uuid.uuid4().hex}"
+    image_id = uuid.uuid4().hex
+    image_slug = f"image-article-{image_id}"
     token = csrf_token(session, base_url, "/articles/new/")
     image_bytes = b"GIF87a\x01\x00\x01\x00\x80\x00\x00\xff\xff\xff\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;"
     response = session.post(
         f"{base_url}/articles/new/",
         data={
             "csrfmiddlewaretoken": token,
-            "title": "Image article",
-            "slug": image_slug,
+            "title": f"Image article {image_id}",
             "body": "An image.",
         },
         files={"image": ("pixel.gif", image_bytes, "image/gif")},
@@ -373,7 +376,10 @@ def test_django_markdown_r2(dev_server):
 
     detail = session.get(f"{base_url}/articles/{image_slug}/")
     assert detail.status_code == 200
-    image_match = re.search(r'<img src="([^"]+)" alt="Image article">', detail.text)
+    image_match = re.search(
+        rf'<img src="([^"]+)" alt="Illustration for Image article {image_id}">',
+        detail.text,
+    )
     assert image_match is not None
     image = session.get(f"{base_url}{image_match.group(1)}")
     assert image.status_code == 200
@@ -384,17 +390,19 @@ def test_django_markdown_r2(dev_server):
     assert session.get(f"{base_url}/media/images/missing.gif").status_code == 404
 
     token = csrf_token(session, base_url, f"/articles/{slug}/edit/")
+    edit_form = session.get(f"{base_url}/articles/{slug}/edit/")
+    assert 'name="slug"' not in edit_form.text
     response = session.post(
         f"{base_url}/articles/{slug}/edit/",
         data={
             "csrfmiddlewaretoken": token,
             "title": "Updated article",
-            "slug": slug,
             "body": "Updated body",
         },
         allow_redirects=False,
     )
     assert response.status_code == 302
+    assert response.headers["Location"] == f"/articles/{slug}/"
     updated = session.get(f"{base_url}/articles/{slug}/")
     assert updated.status_code == 200
     assert "Updated article" in updated.text

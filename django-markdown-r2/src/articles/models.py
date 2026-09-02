@@ -2,6 +2,7 @@ import uuid
 
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils.text import slugify
 
 
 def generate_article_id():
@@ -24,3 +25,15 @@ class Article(models.Model):
     class Meta:
         db_table = "articles"
         ordering = ["-created_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = (slugify(self.title) or "article")[:100].rstrip("-")
+            candidate = base
+            suffix_number = 2
+            while type(self).objects.filter(slug=candidate).exists():
+                suffix = f"-{suffix_number}"
+                candidate = f"{base[: 100 - len(suffix)].rstrip('-')}{suffix}"
+                suffix_number += 1
+            self.slug = candidate
+        return super().save(*args, **kwargs)

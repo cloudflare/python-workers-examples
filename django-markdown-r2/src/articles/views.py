@@ -22,10 +22,17 @@ def render_markdown(markdown):
     return mark_safe(MarkdownIt("js-default").render(markdown))
 
 
+def format_date(value):
+    return f"{value:%B} {value.day}, {value.year}"
+
+
 def article_list(request):
-    return render(
-        request, "articles/article_list.html", {"articles": Article.objects.all()}
-    )
+    articles = list(Article.objects.all())
+    for article in articles:
+        article.rendered_body = render_markdown(article.body)
+        article.updated_date = format_date(article.updated_at)
+        article.updated_iso = article.updated_at.isoformat()
+    return render(request, "articles/article_list.html", {"articles": articles})
 
 
 def article_detail(request, slug):
@@ -33,7 +40,14 @@ def article_detail(request, slug):
     return render(
         request,
         "articles/article_detail.html",
-        {"article": article, "rendered_body": render_markdown(article.body)},
+        {
+            "article": article,
+            "created_date": format_date(article.created_at),
+            "created_iso": article.created_at.isoformat(),
+            "rendered_body": render_markdown(article.body),
+            "updated_date": format_date(article.updated_at),
+            "updated_iso": article.updated_at.isoformat(),
+        },
     )
 
 
