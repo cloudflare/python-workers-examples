@@ -31,6 +31,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`websocket-stream-consumer/`**](websocket-stream-consumer) — shows how to use [WebSocket](https://developers.cloudflare.com/workers/runtime-apis/websockets/) to consume a stream of data with Python Workers.
 - [**`chatroom/`**](chatroom) - A real-time chatroom using WebSocket.
 - [**`sync-http-clients/`**](sync-http-clients) — demonstrates outbound HTTP with synchronous Python clients (`requests`, `urllib3`, and `httpx.Client`).
+- [**`url-shortener/`**](url-shortener) — a URL shortener backed by Workers KV.
 - [**`dynamic-py-py/`**](dynamic-py-py) — shows how to load and run a Python Worker dynamically at runtime using a [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/) binding.
 - [**`image-redraw/`**](image-redraw) — an example that combines [FastAPI](https://fastapi.tiangolo.com/), [R2](https://developers.cloudflare.com/r2/), [Queues](https://developers.cloudflare.com/queues/), [Workflows](https://developers.cloudflare.com/workflows/) and [Workers AI](https://developers.cloudflare.com/workers-ai/) to redraw uploaded images.
 - [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.

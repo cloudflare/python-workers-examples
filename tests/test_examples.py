@@ -129,6 +129,27 @@ def test_sync_http_clients(dev_server):
         assert result["saw_expected_text"] is True
 
 
+def test_url_shortener(dev_server):
+    port = dev_server
+    base = f"http://localhost:{port}"
+    destination = "https://example.com/path"
+
+    response = requests.post(f"{base}/shorten", json={"url": destination})
+    assert response.status_code == 201
+    shortened = response.json()
+    assert len(shortened["code"]) == 8
+    assert shortened["short_url"] == f"{base}/{shortened['code']}"
+    assert shortened["url"] == destination
+
+    response = requests.get(shortened["short_url"], allow_redirects=False)
+    assert response.status_code == 302
+    assert response.headers["location"] == destination
+
+    response = requests.get(f"{base}/missing-code")
+    assert response.status_code == 404
+    assert response.json()["error"] == "not found"
+
+
 def test_cron(dev_server):
     port = dev_server
     response = requests.get(f"http://localhost:{port}")
