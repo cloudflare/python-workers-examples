@@ -24,6 +24,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`durable-objects/`**](durable-objects) — An example with storing state in a [Durable Object](https://developers.cloudflare.com/durable-objects/).
 - [**`cron/`**](cron) — shows a simple [cron job](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
 - [**`workers-ai/`**](workers-ai) makes a call [Workers AI](https://developers.cloudflare.com/workers-ai/) to run inference on Cloudflare's Global Network.
+- [**`vectorize-rag/`**](vectorize-rag) — a RAG example using remote Workers AI and [Vectorize](https://developers.cloudflare.com/vectorize/) bindings.
 - [**`workflows/`**](workflows) — shows a durable [Workflows](https://developers.cloudflare.com/workflows/) example.
 - [**`opengraph/`**](opengraph) — shows how to use [HTMLRewriter](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/) to generate OpenGraph images with Python Workers.
 - [**`image-gen/`**](image-gen) — shows how to use [Pillow](https://pillow.readthedocs.io/en/stable/) to generate images with Python Workers.
