@@ -37,6 +37,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`image-redraw/`**](image-redraw) — an example that combines [FastAPI](https://fastapi.tiangolo.com/), [R2](https://developers.cloudflare.com/r2/), [Queues](https://developers.cloudflare.com/queues/), [Workflows](https://developers.cloudflare.com/workflows/) and [Workers AI](https://developers.cloudflare.com/workers-ai/) to redraw uploaded images.
 - [**`django/`**](django) — runs a naive Django WSGI application directly on Python Workers.
 - [**`django-todo-d1/`**](django-todo-d1) — uses Django with D1 for a basic TODO application.
+- [**`django-markdown-r2/`**](django-markdown-r2) — a server-rendered Django blog using Durable Object SQLite and R2 for media storage.
 - [**`fastapi-todo/`**](fastapi-todo) — implements the [Todo-Backend](https://todobackend.com) spec with FastAPI (ASGI) and D1.
 - [**`flask-todo/`**](flask-todo) — implements the same [Todo-Backend](https://todobackend.com) API with [Flask](https://flask.palletsprojects.com/) (WSGI) and D1.
 

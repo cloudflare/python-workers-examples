@@ -1,0 +1,32 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "django-markdown-r2-worker",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-08-21",
+	"compatibility_flags": [
+		"python_workers"
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "DO_STORAGE",
+				"class_name": "KnowledgeBase"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["KnowledgeBase"]
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "IMAGES",
+			"bucket_name": "django-markdown-r2-images"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
