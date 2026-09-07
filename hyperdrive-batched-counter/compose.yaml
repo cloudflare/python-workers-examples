@@ -1,0 +1,23 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: reactions
+      POSTGRES_PASSWORD: reactions
+      POSTGRES_DB: reactions
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_INITDB_ARGS: --auth-host=md5
+    ports:
+      - "5432:5432"
+    volumes:
+      - reaction-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reactions -d reactions"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  reaction-data:
