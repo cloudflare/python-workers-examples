@@ -401,9 +401,6 @@ def csrf_token(session, base_url, path):
 def test_django_markdown_r2(dev_server):
     base_url = f"http://localhost:{dev_server}"
     session = requests.Session()
-    article_id = uuid.uuid4().hex
-    title = f"Safe Markdown {article_id}"
-    slug = f"safe-markdown-{article_id}"
 
     response = session.get(base_url)
     assert response.status_code == 200
