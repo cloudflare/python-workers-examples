@@ -1,8 +1,14 @@
-from datetime import UTC, datetime
+from contextlib import closing
+from datetime import UTC, datetime, timedelta
 
 import pg8000
-from constants import FLUSH_DELAY, PENDING_KEY, REACTIONS, ROOM_KEY, TOTALS_KEY
 from workers import DurableObject
+
+REACTIONS = ("heart", "laugh", "fire")
+PENDING_KEY = "pending_reactions"
+TOTALS_KEY = "total_reactions"
+ROOM_KEY = "room_id"
+FLUSH_DELAY = timedelta(seconds=5)
 
 
 class ReactionRoom(DurableObject):
@@ -49,9 +55,7 @@ class ReactionRoom(DurableObject):
 
     async def get_stats(self, room_id):
         persisted = dict.fromkeys(REACTIONS, 0)
-        connection = None
-        try:
-            connection = self._connection()
+        with self._connection() as connection:
             cursor = connection.cursor()
             cursor.execute(
                 "SELECT reaction, count FROM reaction_stats WHERE room_id = %s",
@@ -59,9 +63,6 @@ class ReactionRoom(DurableObject):
             )
             for reaction, count in cursor.fetchall():
                 persisted[reaction] = int(count)
-        finally:
-            if connection is not None:
-                connection.close()
         return {
             "totals": self.totals.copy(),
             "persisted": persisted,
@@ -77,16 +78,12 @@ class ReactionRoom(DurableObject):
             return
 
         stored = await self.ctx.storage.get([PENDING_KEY, TOTALS_KEY, ROOM_KEY])
-        pending = stored.get(PENDING_KEY)
-        totals = stored.get(TOTALS_KEY)
-        if pending:
-            self.pending = {
-                reaction: int(pending.get(reaction, 0)) for reaction in REACTIONS
-            }
-        if totals:
-            self.totals = {
-                reaction: int(totals.get(reaction, 0)) for reaction in REACTIONS
-            }
+        pending = stored.get(PENDING_KEY, {})
+        totals = stored.get(TOTALS_KEY, {})
+        self.pending = {
+            reaction: int(pending.get(reaction, 0)) for reaction in REACTIONS
+        }
+        self.totals = {reaction: int(totals.get(reaction, 0)) for reaction in REACTIONS}
         self.room_id = stored.get(ROOM_KEY)
         self.loaded = True
 
@@ -108,13 +105,15 @@ class ReactionRoom(DurableObject):
 
     def _connection(self):
         hd = self.env.HYPERDRIVE
-        return pg8000.connect(
-            host=hd.host,
-            port=int(hd.port),
-            user=hd.user,
-            password=hd.password,
-            database=hd.database,
-            ssl_context=False,
+        return closing(
+            pg8000.connect(
+                host=hd.host,
+                port=int(hd.port),
+                user=hd.user,
+                password=hd.password,
+                database=hd.database,
+                ssl_context=False,
+            )
         )
 
     async def alarm(self, alarm_info):
@@ -127,43 +126,38 @@ class ReactionRoom(DurableObject):
             return
         totals = self.totals.copy()
 
-        connection = None
-        try:
-            connection = self._connection()
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-                INSERT INTO reaction_stats (room_id, reaction, count)
-                VALUES (%s, %s, %s), (%s, %s, %s), (%s, %s, %s)
-                ON CONFLICT (room_id, reaction) DO UPDATE SET
-                    count = EXCLUDED.count,
-                    updated_at = CURRENT_TIMESTAMP
-                """,
-                (
-                    self.room_id,
-                    "heart",
-                    totals["heart"],
-                    self.room_id,
-                    "laugh",
-                    totals["laugh"],
-                    self.room_id,
-                    "fire",
-                    totals["fire"],
-                ),
-            )
-            connection.commit()
-        except Exception as error:
-            if connection is not None:
+        with self._connection() as connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute(
+                    """
+                    INSERT INTO reaction_stats (room_id, reaction, count)
+                    VALUES (%s, %s, %s), (%s, %s, %s), (%s, %s, %s)
+                    ON CONFLICT (room_id, reaction) DO UPDATE SET
+                        count = EXCLUDED.count,
+                        updated_at = CURRENT_TIMESTAMP
+                    """,
+                    (
+                        self.room_id,
+                        "heart",
+                        totals["heart"],
+                        self.room_id,
+                        "laugh",
+                        totals["laugh"],
+                        self.room_id,
+                        "fire",
+                        totals["fire"],
+                    ),
+                )
+                connection.commit()
+            except Exception as error:
                 try:
                     connection.rollback()
                 except Exception as rollback_error:
                     print(f"Reaction rollback failed: {rollback_error}")
-            print(f"Reaction flush failed: {error}")
-            await self._schedule_retry()
-            return
-        finally:
-            if connection is not None:
-                connection.close()
+                print(f"Reaction flush failed: {error}")
+                await self._schedule_retry()
+                return
 
         next_pending = {
             reaction: self.pending[reaction] - count

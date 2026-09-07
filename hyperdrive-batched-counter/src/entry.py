@@ -1,5 +1,3 @@
-from constants import REACTIONS
-
 # Side effect: register the Durable Object class with the Workers runtime
 from room import ReactionRoom  # noqa: F401
 from starlette.applications import Starlette
@@ -18,8 +16,6 @@ def room_stub(request: Request):
 async def add_reaction(request: Request):
     room, stub = room_stub(request)
     reaction = request.path_params["reaction"]
-    if reaction not in REACTIONS:
-        return JSONResponse({"error": "Unknown reaction"}, status_code=400)
     return JSONResponse(await stub.add_reaction(room, reaction), status_code=202)
 
 
