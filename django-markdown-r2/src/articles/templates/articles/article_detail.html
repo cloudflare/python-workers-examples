@@ -1,0 +1,33 @@
+{% extends "articles/base.html" %}
+
+{% block title %}{{ article.title }} | Knowledge base{% endblock %}
+
+{% block content %}
+  <article aria-labelledby="article-title">
+    <header>
+      <hgroup>
+        <h1 id="article-title">{{ article.title }}</h1>
+        <p>
+          <small>
+            Published <time datetime="{{ created_iso }}">{{ created_date }}</time>
+            &middot; Updated <time datetime="{{ updated_iso }}">{{ updated_date }}</time>
+          </small>
+        </p>
+      </hgroup>
+      <nav aria-label="Article actions">
+        <ul>
+          <li><a href="{% url 'article-list' %}">Back to articles</a></li>
+          <li><a href="{% url 'article-edit' slug=article.slug %}">Edit article</a></li>
+        </ul>
+      </nav>
+    </header>
+    {% if article.image %}
+      <figure>
+        <img src="{{ article.image.url }}" alt="Illustration for {{ article.title }}">
+      </figure>
+    {% endif %}
+    <section aria-label="Article content">
+      {{ rendered_body }}
+    </section>
+  </article>
+{% endblock %}
