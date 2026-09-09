@@ -57,4 +57,3 @@ You can also use your favorite MCP client to test the server. For example, if yo
 ```
 
 and your MCP client should be able to discover and use the server.
-
