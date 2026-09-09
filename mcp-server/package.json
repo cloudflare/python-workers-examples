@@ -1,5 +1,5 @@
 {
-	"name": "mcp-incident-server",
+	"name": "mcp-server",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {

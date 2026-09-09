@@ -413,7 +413,7 @@ def test_django_markdown_r2(dev_server):
 
 
 @pytest.fixture
-def init_mcp_incident_server_db():
+def init_mcp_server_db():
     subprocess.run(
         [
             "uv",
@@ -443,7 +443,7 @@ def mcp_json_response(response):
     return messages[-1]
 
 
-def test_mcp_incident_server(init_mcp_incident_server_db, dev_server):
+def test_mcp_server(init_mcp_server_db, dev_server):
     base = f"http://localhost:{dev_server}/mcp"
     headers = {
         "Accept": "application/json, text/event-stream",

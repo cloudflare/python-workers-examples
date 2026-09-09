@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "mcp-incident-server",
+	"name": "mcp-server",
 	"main": "src/entry.py",
 	"compatibility_date": "2026-09-07",
 	"compatibility_flags": [
