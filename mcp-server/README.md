@@ -42,3 +42,19 @@ curl -X POST http://localhost:8787/mcp \
   -H 'Mcp-Name: open_incident' \
   --data '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{}},"name":"open_incident","arguments":{"title":"API latency","severity":"high"}}}'
 ```
+
+You can also use your favorite MCP client to test the server. For example, if you are using VS Code, add the following to your settings:
+
+```json
+{
+  "servers": {
+    "incident-server": {
+      "type": "http",
+      "url": "http://localhost:8787/mcp"
+    }
+  }
+}
+```
+
+and your MCP client should be able to discover and use the server.
+
