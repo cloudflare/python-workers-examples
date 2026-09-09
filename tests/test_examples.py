@@ -425,7 +425,7 @@ def init_mcp_incident_server_db():
             "mcp-incidents",
             "--local",
         ],
-        cwd=REPO_ROOT / "mcp-incident-server",
+        cwd=REPO_ROOT / "mcp-server",
         check=True,
     )
 
