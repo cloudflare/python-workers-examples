@@ -11,3 +11,6 @@ pylock.toml
 .venv-workers
 .pytest_cache
 .ruff_cache
+
+**/.DS_Store
+**/default.profraw

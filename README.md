@@ -19,6 +19,7 @@ Need to deploy your Worker to Cloudflare? Python Workers are in open beta and ha
 - [**`binding/`**](binding) — shows how [bindings](https://developers.cloudflare.com/workers/configuration/bindings/) work in Python Workers. Put a key into Workers KV, and then read it.
 - [**`fastapi/`**](fastapi) — demonstrates how to use the [FastAPI](https://fastapi.tiangolo.com/) package with Python Workers
 - [**`query-d1/`**](query-d1) - shows how to query D1 with Python Workers
+- [**`mcp-server/`**](mcp-server) — an MCP server backed by D1.
 - [**`langchain/`**](langchain) — demonstrates how to use the [LangChain](https://pypi.org/project/langchain/) package with Python Workers. Currently broken.
 - [**`assets/`**](assets) — An example with an assets binding.
 - [**`durable-objects/`**](durable-objects) — An example with storing state in a [Durable Object](https://developers.cloudflare.com/durable-objects/).
