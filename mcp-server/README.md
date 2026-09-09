@@ -1,5 +1,7 @@
 # MCP Server with D1
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/mcp-server)
+
 This example shows how to create a simple [Model Context Protocol](https://modelcontextprotocol.io/) server.
 It uses the official [Python MCP SDK](https://py.sdk.modelcontextprotocol.io/) and a D1 database.
 
