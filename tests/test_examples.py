@@ -1,3 +1,4 @@
+import json
 import re
 import subprocess
 import uuid
@@ -409,3 +410,74 @@ def test_django_markdown_r2(dev_server):
         session.get(f"{base_url}/articles/missing-{uuid.uuid4().hex}/").status_code
         == 404
     )
+
+
+@pytest.fixture
+def init_mcp_server_db():
+    subprocess.run(
+        [
+            "uv",
+            "run",
+            "pywrangler",
+            "d1",
+            "migrations",
+            "apply",
+            "mcp-incidents",
+            "--local",
+        ],
+        cwd=REPO_ROOT / "mcp-server",
+        check=True,
+    )
+
+
+def mcp_json_response(response):
+    if "text/event-stream" not in response.headers.get("content-type", ""):
+        return response.json()
+
+    messages = [
+        json.loads(line.removeprefix("data: "))
+        for line in response.text.splitlines()
+        if line.startswith("data: ")
+    ]
+    assert messages
+    return messages[-1]
+
+
+def test_mcp_server(init_mcp_server_db, dev_server):
+    base = f"http://localhost:{dev_server}/mcp"
+    headers = {
+        "Accept": "application/json, text/event-stream",
+        "Content-Type": "application/json",
+        "MCP-Protocol-Version": "2026-07-28",
+    }
+    meta = {
+        "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+        "io.modelcontextprotocol/clientCapabilities": {},
+    }
+
+    def request(method, params, request_id):
+        request_headers = {**headers, "Mcp-Method": method}
+        if method == "tools/call":
+            request_headers["Mcp-Name"] = params["name"]
+        response = requests.post(
+            base,
+            headers=request_headers,
+            json={
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "method": method,
+                "params": {"_meta": meta, **params},
+            },
+        )
+        assert response.status_code == 200
+        return response
+
+    discovered = mcp_json_response(request("server/discover", {}, 1))
+    assert "result" in discovered
+
+    tools = mcp_json_response(request("tools/list", {}, 2))["result"]["tools"]
+    assert {tool["name"] for tool in tools} == {
+        "open_incident",
+        "add_update",
+        "list_open_incidents",
+    }

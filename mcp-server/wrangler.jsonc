@@ -1,0 +1,21 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "mcp-server",
+	"main": "src/entry.py",
+	"compatibility_date": "2026-09-07",
+	"compatibility_flags": [
+		"python_workers",
+		"python_workers_314"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "mcp-incidents",
+			"database_id": "00000000-0000-0000-0000-000000000000", // Replace with your D1 database UUID.
+			"migrations_dir": "./migrations"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

@@ -1,0 +1,15 @@
+[project]
+name = "mcp-server"
+version = "0.0.0"
+description = "An MCP incident server using Python Workers and D1"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "mcp==2.2.0"
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk"
+]
