@@ -1,6 +1,6 @@
 # Image Redraw — FastAPI + R2 + Queues + Workflows + Workers AI
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/20-image-redraw)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/python-workers-examples/tree/main/image-redraw)
 
 Upload a picture and get it back redrawn as a wobbly MS Paint doodle.
 
