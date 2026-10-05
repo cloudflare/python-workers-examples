@@ -5,7 +5,7 @@ description = "Python fastapi example"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi",
+    "fastapi<0.142",
     "markupsafe",
     "jinja2",
 ]
