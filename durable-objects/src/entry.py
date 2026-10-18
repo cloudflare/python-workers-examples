@@ -20,7 +20,8 @@ class Default(WorkerEntrypoint):
     async def fetch(self, request):
         url = urlparse(request.url)
 
-        list_id = url.path.split("/")[1]
+        segments = url.path.split("/")
+        list_id = segments[1]
         if list_id == "":
             return Response(
                 "Go to /<list_id>/show to see messages\nGo to /<list_id>/add/<message> to add a message",
@@ -31,12 +32,13 @@ class Default(WorkerEntrypoint):
         stub = self.env.LISTS.get(do_id)
 
         # Note: This is adding a message via GET URL path for simplicity, in a real app, use a POST
-        if "/add" in url.path:
+        action = segments[2] if len(segments) > 2 else ""
+        if action == "add" and len(segments) > 3:
             # message = await request.text()
-            message = url.path.split("/")[3]
+            message = segments[3]
             await stub.add_message(message)
             return Response("Message sent")
-        elif "/show" in url.path:
+        elif action == "show":
             messages = await stub.get_messages()
             if not messages:
                 return Response("No messages")

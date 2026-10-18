@@ -112,6 +112,11 @@ def test_durable_objects(dev_server):
     response = requests.get(f"http://localhost:{port}/room-2/show")
     assert response.status_code == 200
     assert response.text == "No messages"
+    response = requests.get(f"http://localhost:{port}/address-book/show")
+    assert response.status_code == 200
+    assert response.text == "No messages"
+    response = requests.get(f"http://localhost:{port}/room-1/add")
+    assert response.status_code == 404
 
 
 def test_sync_http_clients(dev_server):
