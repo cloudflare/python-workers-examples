@@ -4,7 +4,6 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from PIL import Image, ImageDraw, ImageFont
-from pyodide.ffi import to_js
 from workers import Request, Response, WorkerEntrypoint
 
 
@@ -321,10 +320,8 @@ class Default(WorkerEntrypoint):
         image_bytes = buffer.getvalue()
 
         # Create and return response with appropriate headers
-        #
-        # TODO: This currently performs an unnecessary copy, need to fix.
         return Response(
-            to_js(image_bytes).buffer,
+            image_bytes,
             headers={
                 "Content-Type": content_type,
                 "Cache-Control": "public, max-age=3600",
